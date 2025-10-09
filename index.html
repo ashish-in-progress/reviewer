@@ -3,276 +3,498 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investment Report</title>
+    <title>Investment Portfolio Report</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; background-color: #121212; color: #e0e0e0; }
-        .container { max-width: 1200px; margin: auto; padding: 20px; background-color: #1e1e1e; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); }
-        h1, h2, h3 { color: #bb86fc; }
-        .summary-card { background-color: #2c2c2c; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-around; flex-wrap: wrap; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
-        .summary-item { text-align: center; margin: 10px; flex: 1; min-width: 180px; }
-        .summary-label { font-size: 0.9em; color: #a0a0a0; }
-        .summary-value { font-size: 1.5em; font-weight: bold; color: #e0e0e0; }
-        .asset-card { background-color: #2c2c2c; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
-        .asset-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .asset-title { font-size: 1.2em; font-weight: bold; color: #e0e0e0; }
-        .asset-type { background-color: #3a3a3a; color: #bb86fc; padding: 5px 10px; border-radius: 5px; font-size: 0.8em; }
-        .asset-details { display: flex; flex-wrap: wrap; justify-content: space-between; }
-        .detail-item { flex: 1; min-width: 150px; margin: 5px 0; }
-        .detail-label { font-size: 0.8em; color: #a0a0a0; }
-        .detail-value { font-size: 0.9em; font-weight: bold; }
-        .positive { color: #00ff00; }
-        .negative { color: #ff4d4d; }
-        .neutral { color: #e0e0e0; }
-        .chart-container { background-color: #2c2c2c; padding: 20px; border-radius: 8px; margin-top: 20px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
-        .chart-wrapper { display: flex; flex-wrap: wrap; justify-content: space-around; }
-        .chart-item { flex: 1; min-width: 300px; margin: 10px; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.dark-mode {
+            background-color: #1a1a2e;
+            color: #e0e0e0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        body.dark-mode .container {
+            background: #16213e;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        h1, h2, h3 {
+            color: #0056b3;
+            margin-bottom: 20px;
+            transition: color 0.3s;
+        }
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 {
+            color: #0f3460;
+        }
+        .summary-cards {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .summary-card {
+            background: #e9f5ff;
+            padding: 25px;
+            border-radius: 10px;
+            flex: 1;
+            min-width: 280px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        body.dark-mode .summary-card {
+            background: #0f3460;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .summary-card h3 {
+            color: #0056b3;
+            margin-top: 0;
+            font-size: 1.2em;
+        }
+        body.dark-mode .summary-card h3 {
+            color: #53a8ff;
+        }
+        .summary-card p {
+            font-size: 1.6em;
+            font-weight: bold;
+            margin: 10px 0 0;
+            color: #007bff;
+        }
+        body.dark-mode .summary-card p {
+            color: #87cefa;
+        }
+        .asset-card {
+            background: #fdfefe;
+            border: 1px solid #e3e3e3;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+            transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+        body.dark-mode .asset-card {
+            background: #0d1424;
+            border-color: #2a3b58;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        .asset-card h3 {
+            color: #0056b3;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        body.dark-mode .asset-card h3 {
+            color: #53a8ff;
+            border-bottom-color: #2a3b58;
+        }
+        .asset-card h3 span {
+            font-size: 0.8em;
+            background: #007bff;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        body.dark-mode .asset-card h3 span {
+            background: #87cefa;
+            color: #1a1a2e;
+        }
+        .asset-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px 20px;
+        }
+        .asset-details div strong {
+            color: #555;
+            transition: color 0.3s;
+        }
+        body.dark-mode .asset-details div strong {
+            color: #bbb;
+        }
+        .gain-loss {
+            font-weight: bold;
+            color: green;
+        }
+        .gain-loss.negative {
+            color: red;
+        }
+        .charts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+        .chart-container {
+            flex: 1;
+            min-width: 300px;
+            background: #fdfefe;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        body.dark-mode .chart-container {
+            background: #0d1424;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        .mode-toggle {
+            float: right;
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background 0.3s;
+        }
+        body.dark-mode .mode-toggle {
+            background: #87cefa;
+            color: #1a1a2e;
+        }
+        .news-sentiment {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            transition: border-color 0.3s;
+        }
+        body.dark-mode .news-sentiment {
+            border-top-color: #2a3b58;
+        }
+        .news-sentiment p {
+            margin-bottom: 5px;
+        }
+        .sentiment-positive { color: #28a745; font-weight: bold; }
+        .sentiment-neutral { color: #ffc107; font-weight: bold; }
+        .sentiment-negative { color: #dc3545; font-weight: bold; }
+        .suggestion {
+            margin-top: 10px;
+            font-weight: bold;
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .suggestion-buy { background-color: #d4edda; color: #155724; }
+        .suggestion-hold { background-color: #fff3cd; color: #856404; }
+        .suggestion-sell { background-color: #f8d7da; color: #721c24; }
+        body.dark-mode .suggestion-buy { background-color: #0f5132; color: #d4edda; }
+        body.dark-mode .suggestion-hold { background-color: #664d03; color: #fff3cd; }
+        body.dark-mode .suggestion-sell { background-color: #842029; color: #f8d7da; }
+
         @media (max-width: 768px) {
-            .summary-card, .asset-details, .chart-wrapper { flex-direction: column; align-items: stretch; }
-            .summary-item, .detail-item, .chart-item { min-width: unset; width: 100%; margin: 5px 0; }
+            .summary-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+            .summary-card {
+                min-width: 90%;
+            }
+            .asset-details {
+                grid-template-columns: 1fr;
+            }
+            .charts {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Investment Report</h1>
+        <button class="mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+        <h1>Investment Portfolio Report</h1>
 
-        <div class="summary-card">
-            <div class="summary-item">
-                <div class="summary-label">Total Invested</div>
-                <div class="summary-value">INR 415360.00</div>
+        <div class="summary-cards">
+            <div class="summary-card">
+                <h3>Total Invested</h3>
+                <p>INR 417,060.00</p>
             </div>
-            <div class="summary-item">
-                <div class="summary-label">Current Value</div>
-                <div class="summary-value">INR 619714.75</div>
+            <div class="summary-card">
+                <h3>Current Value</h3>
+                <p>INR 620,050.48</p>
             </div>
-            <div class="summary-item">
-                <div class="summary-label">Overall Gain/Loss</div>
-                <div class="summary-value positive">INR 204354.75 (49.19%)</div>
+            <div class="summary-card">
+                <h3>Overall Gain/Loss</h3>
+                <p class="gain-loss">INR 202,990.48</p>
+            </div>
+            <div class="summary-card">
+                <h3>Overall Gain/Loss %</h3>
+                <p class="gain-loss">48.67%</p>
             </div>
         </div>
 
         <h2>Your Assets</h2>
-        
-        <div class="asset-card">
-            <div class="asset-header">
-                <div class="asset-title">HDFCBANK (Stock)</div>
-                <div class="asset-type">Stock</div>
-            </div>
-            <div class="asset-details">
-                <div class="detail-item"><div class="detail-label">Quantity:</div><div class="detail-value">3</div></div>
-                <div class="detail-item"><div class="detail-label">Buy Price:</div><div class="detail-value">INR 980.00</div></div>
-                <div class="detail-item"><div class="detail-label">Current Price:</div><div class="detail-value">INR 975.00</div></div>
-                <div class="detail-item"><div class="detail-label">Invested:</div><div class="detail-value">INR 2,940.00</div></div>
-                <div class="detail-item"><div class="detail-label">Current Value:</div><div class="detail-value">INR 2,925.00</div></div>
-                <div class="detail-item"><div class="detail-label">Gain/Loss:</div><div class="detail-value negative">INR -15.00 (-0.51%)</div></div>
-                <div class="detail-item"><div class="detail-label">Market Cap:</div><div class="detail-value">INR 7,486,945,961,511.00</div></div>
-                <div class="detail-item"><div class="detail-label">P/E Ratio:</div><div class="detail-value">21.21</div></div>
-                <div class="detail-item"><div class="detail-label">Dividend Yield:</div><div class="detail-value">Not Available</div></div>
-            </div>
-        </div>
-        
-        <div class="asset-card">
-            <div class="asset-header">
-                <div class="asset-title">TCS (Stock)</div>
-                <div class="asset-type">Stock</div>
-            </div>
-            <div class="asset-details">
-                <div class="detail-item"><div class="detail-label">Quantity:</div><div class="detail-value">12</div></div>
-                <div class="detail-item"><div class="detail-label">Buy Price:</div><div class="detail-value">INR 2,700.00</div></div>
-                <div class="detail-item"><div class="detail-label">Current Price:</div><div class="detail-value">INR 3,060.20</div></div>
-                <div class="detail-item"><div class="detail-label">Invested:</div><div class="detail-value">INR 32,400.00</div></div>
-                <div class="detail-item"><div class="detail-label">Current Value:</div><div class="detail-value">INR 36,722.40</div></div>
-                <div class="detail-item"><div class="detail-label">Gain/Loss:</div><div class="detail-value positive">INR 4,322.40 (13.34%)</div></div>
-                <div class="detail-item"><div class="detail-label">Market Cap:</div><div class="detail-value">INR 11,080,039,456,209.00</div></div>
-                <div class="detail-item"><div class="detail-label">P/E Ratio:</div><div class="detail-value">22.47</div></div>
-                <div class="detail-item"><div class="detail-label">Dividend Yield:</div><div class="detail-value">Not Available</div></div>
-            </div>
-        </div>
-        
-        <div class="asset-card">
-            <div class="asset-header">
-                <div class="asset-title">BTC (Crypto)</div>
-                <div class="asset-type">Crypto</div>
-            </div>
-            <div class="asset-details">
-                <div class="detail-item"><div class="detail-label">Quantity:</div><div class="detail-value">0.001</div></div>
-                <div class="detail-item"><div class="detail-label">Buy Price:</div><div class="detail-value">INR 10,000,000.00</div></div>
-                <div class="detail-item"><div class="detail-label">Current Price:</div><div class="detail-value">INR 10,930,176.12</div></div>
-                <div class="detail-item"><div class="detail-label">Invested:</div><div class="detail-value">INR 10,000.00</div></div>
-                <div class="detail-item"><div class="detail-label">Current Value:</div><div class="detail-value">INR 10,930.18</div></div>
-                <div class="detail-item"><div class="detail-label">Gain/Loss:</div><div class="detail-value positive">INR 930.18 (9.30%)</div></div>
-                <div class="detail-item"><div class="detail-label">Market Cap:</div><div class="detail-value">Not Available</div></div>
-                <div class="detail-item"><div class="detail-label">P/E Ratio:</div><div class="detail-value">Not Available</div></div>
-                <div class="detail-item"><div class="detail-label">Dividend Yield:</div><div class="detail-value">Not Available</div></div>
-            </div>
-        </div>
-        
-        <div class="asset-card">
-            <div class="asset-header">
-                <div class="asset-title">SWIGGY (Stock)</div>
-                <div class="asset-type">Stock</div>
-            </div>
-            <div class="asset-details">
-                <div class="detail-item"><div class="detail-label">Quantity:</div><div class="detail-value">100</div></div>
-                <div class="detail-item"><div class="detail-label">Buy Price:</div><div class="detail-value">INR 421.00</div></div>
-                <div class="detail-item"><div class="detail-label">Current Price:</div><div class="detail-value">INR 436.10</div></div>
-                <div class="detail-item"><div class="detail-label">Invested:</div><div class="detail-value">INR 42,100.00</div></div>
-                <div class="detail-item"><div class="detail-label">Current Value:</div><div class="detail-value">INR 43,610.00</div></div>
-                <div class="detail-item"><div class="detail-label">Gain/Loss:</div><div class="detail-value positive">INR 1,510.00 (3.59%)</div></div>
-                <div class="detail-item"><div class="detail-label">Market Cap:</div><div class="detail-value">INR 999,032,940,825.00</div></div>
-                <div class="detail-item"><div class="detail-label">P/E Ratio:</div><div class="detail-value">Not Available</div></div>
-                <div class="detail-item"><div class="detail-label">Dividend Yield:</div><div class="detail-value">Not Available</div></div>
-            </div>
-        </div>
-        
-        <div class="asset-card">
-            <div class="asset-header">
-                <div class="asset-title">ETH (Crypto)</div>
-                <div class="asset-type">Crypto</div>
-            </div>
-            <div class="asset-details">
-                <div class="detail-item"><div class="detail-label">Quantity:</div><div class="detail-value">1</div></div>
-                <div class="detail-item"><div class="detail-label">Buy Price:</div><div class="detail-value">INR 300,000.00</div></div>
-                <div class="detail-item"><div class="detail-label">Current Price:</div><div class="detail-value">INR 389,341.18</div></div>
-                <div class="detail-item"><div class="detail-label">Invested:</div><div class="detail-value">INR 300,000.00</div></div>
-                <div class="detail-item"><div class="detail-label">Current Value:</div><div class="detail-value">INR 389,341.18</div></div>
-                <div class="detail-item"><div class="detail-label">Gain/Loss:</div><div class="detail-value positive">INR 89,341.18 (29.78%)</div></div>
-                <div class="detail-item"><div class="detail-label">Market Cap:</div><div class="detail-value">Not Available</div></div>
-                <div class="detail-item"><div class="detail-label">P/E Ratio:</div><div class="detail-value">Not Available</div></div>
-                <div class="detail-item"><div class="detail-label">Dividend Yield:</div><div class="detail-value">Not Available</div></div>
-            </div>
-        </div>
-        
-        <div class="asset-card">
-            <div class="asset-header">
-                <div class="asset-title">PAYTM (Stock)</div>
-                <div class="asset-type">Stock</div>
-            </div>
-            <div class="asset-details">
-                <div class="detail-item"><div class="detail-label">Quantity:</div><div class="detail-value">100</div></div>
-                <div class="detail-item"><div class="detail-label">Buy Price:</div><div class="detail-value">INR 1,000.00</div></div>
-                <div class="detail-item"><div class="detail-label">Current Price:</div><div class="detail-value">INR 1,249.10</div></div>
-                <div class="detail-item"><div class="detail-label">Invested:</div><div class="detail-value">INR 100,000.00</div></div>
-                <div class="detail-item"><div class="detail-label">Current Value:</div><div class="detail-value">INR 124,910.00</div></div>
-                <div class="detail-item"><div class="detail-label">Gain/Loss:</div><div class="detail-value positive">INR 24,910.00 (24.91%)</div></div>
-                <div class="detail-item"><div class="detail-label">Market Cap:</div><div class="detail-value">INR 798,309,412,466.00</div></div>
-                <div class="detail-item"><div class="detail-label">P/E Ratio:</div><div class="detail-value">279.60</div></div>
-                <div class="detail-item"><div class="detail-label">Dividend Yield:</div><div class="detail-value">Not Available</div></div>
-            </div>
-        </div>
-        
-        <div class="asset-card">
-            <div class="asset-header">
-                <div class="asset-title">BMWVENTLTD (Stock)</div>
-                <div class="asset-type">Stock</div>
-            </div>
-            <div class="asset-details">
-                <div class="detail-item"><div class="detail-label">Quantity:</div><div class="detail-value">2</div></div>
-                <div class="detail-item"><div class="detail-label">Buy Price:</div><div class="detail-value">INR 60.00</div></div>
-                <div class="detail-item"><div class="detail-label">Current Price:</div><div class="detail-value">INR 57.55</div></div>
-                <div class="detail-item"><div class="detail-label">Invested:</div><div class="detail-value">INR 120.00</div></div>
-                <div class="detail-item"><div class="detail-label">Current Value:</div><div class="detail-value">INR 115.10</div></div>
-                <div class="detail-item"><div class="detail-label">Gain/Loss:</div><div class="detail-value negative">INR -4.90 (-4.08%)</div></div>
-                <div class="detail-item"><div class="detail-label">Market Cap:</div><div class="detail-value">INR 4,972,282,928.00</div></div>
-                <div class="detail-item"><div class="detail-label">P/E Ratio:</div><div class="detail-value">15.20</div></div>
-                <div class="detail-item"><div class="detail-label">Dividend Yield:</div><div class="detail-value">Not Available</div></div>
-            </div>
-        </div>
-        
-        <div class="asset-card">
-            <div class="asset-header">
-                <div class="asset-title">RELIANCE (Stock)</div>
-                <div class="asset-type">Stock</div>
-            </div>
-            <div class="asset-details">
-                <div class="detail-item"><div class="detail-label">Quantity:</div><div class="detail-value">12</div></div>
-                <div class="detail-item"><div class="detail-label">Buy Price:</div><div class="detail-value">INR 2,400.00</div></div>
-                <div class="detail-item"><div class="detail-label">Current Price:</div><div class="detail-value">INR 1,376.50</div></div>
-                <div class="detail-item"><div class="detail-label">Invested:</div><div class="detail-value">INR 28,800.00</div></div>
-                <div class="detail-item"><div class="detail-label">Current Value:</div><div class="detail-value">INR 16,518.00</div></div>
-                <div class="detail-item"><div class="detail-label">Gain/Loss:</div><div class="detail-value negative">INR -12,282.00 (-42.65%)</div></div>
-                <div class="detail-item"><div class="detail-label">Market Cap:</div><div class="detail-value">INR 18,641,706,150,424.00</div></div>
-                <div class="detail-item"><div class="detail-label">P/E Ratio:</div><div class="detail-value">22.86</div></div>
-                <div class="detail-item"><div class="detail-label">Dividend Yield:</div><div class="detail-value">Not Available</div></div>
-            </div>
-        </div>
-        
 
-        <div class="chart-container">
-            <h2>Investment Overview</h2>
-            <div class="chart-wrapper">
-                <div class="chart-item">
-                    <h3>Invested vs Current Value</h3>
-                    <canvas id="investedVsCurrentChart"></canvas>
-                </div>
-                <div class="chart-item">
-                    <h3>Allocation by Market Value</h3>
-                    <canvas id="allocationPieChart"></canvas>
-                </div>
+        <div class="asset-card">
+            <h3>HDFCBANK <span>Stock</span></h3>
+            <div class="asset-details">
+                <div><strong>Quantity:</strong> 3</div>
+                <div><strong>Buy Price:</strong> INR 980.00</div>
+                <div><strong>Current Price:</strong> INR 975.00</div>
+                <div><strong>Invested:</strong> INR 2,940.00</div>
+                <div><strong>Current Value:</strong> INR 2,925.00</div>
+                <div><strong>Gain/Loss:</strong> <span class="gain-loss negative">-INR 15.00</span></div>
+                <div><strong>Gain/Loss %:</strong> <span class="gain-loss negative">-0.51%</span></div>
+                <div><strong>Market Cap:</strong> INR 7,486,945,961,511.00</div>
+                <div><strong>P/E Ratio:</strong> 21.21</div>
+                <div><strong>Dividend Yield:</strong> Not Available</div>
+            </div>
+            <div class="news-sentiment">
+                <p><strong>News & Sentiment:</strong> <span class="sentiment-neutral">Neutral to Positive</span>. News suggests HDFC Bank's Q3 results were strong, exceeding expectations. Analyst ratings are generally positive with "buy" recommendations and price targets indicating potential upside. While there was a slight dip in price, the overall sentiment is cautiously optimistic due to robust loan growth and asset quality.</p>
+                <p><strong>Suggestion:</strong> <span class="suggestion suggestion-hold">Hold</span>. The bank shows strong fundamentals and positive analyst outlooks. Despite a small unrealized loss, the long-term prospects appear stable.</p>
+            </div>
+        </div>
+
+        <div class="asset-card">
+            <h3>TCS <span>Stock</span></h3>
+            <div class="asset-details">
+                <div><strong>Quantity:</strong> 10</div>
+                <div><strong>Buy Price:</strong> INR 3,000.00</div>
+                <div><strong>Current Price:</strong> INR 3,060.20</div>
+                <div><strong>Invested:</strong> INR 30,000.00</div>
+                <div><strong>Current Value:</strong> INR 30,602.00</div>
+                <div><strong>Gain/Loss:</strong> <span class="gain-loss">INR 602.00</span></div>
+                <div><strong>Gain/Loss %:</strong> <span class="gain-loss">2.01%</span></div>
+                <div><strong>Market Cap:</strong> INR 11,080,039,456,209.00</div>
+                <div><strong>P/E Ratio:</strong> 22.47</div>
+                <div><strong>Dividend Yield:</strong> Not Available</div>
+            </div>
+            <div class="news-sentiment">
+                <p><strong>News & Sentiment:</strong> <span class="sentiment-negative">Mixed to Negative</span>. Recent news highlights potential mass layoffs across the IT sector, with TCS being mentioned. There are also concerns about H-1B visa issues potentially impacting Indian IT companies like TCS. However, TCS itself is also in the news for strong market performance and being a constituent of new indices. Some reports suggest a positive long-term outlook.</p>
+                <p><strong>Suggestion:</strong> <span class="suggestion suggestion-hold">Hold</span>. While there are some negative sentiments related to the broader IT sector and visa issues, TCS has shown positive returns for your investment. It's a large-cap IT stock with generally stable performance. Monitor news for further developments regarding layoffs or visa policies.</p>
+            </div>
+        </div>
+
+        <div class="asset-card">
+            <h3>BTC <span>Crypto</span></h3>
+            <div class="asset-details">
+                <div><strong>Quantity:</strong> 0.001</div>
+                <div><strong>Buy Price:</strong> INR 10,000,000.00</div>
+                <div><strong>Current Price:</strong> INR 10,929,687.75</div>
+                <div><strong>Invested:</strong> INR 10,000.00</div>
+                <div><strong>Current Value:</strong> INR 10,929.69</div>
+                <div><strong>Gain/Loss:</strong> <span class="gain-loss">INR 929.69</span></div>
+                <div><strong>Gain/Loss %:</strong> <span class="gain-loss">9.30%</span></div>
+                <div><strong>Market Cap:</strong> Not Available</div>
+                <div><strong>P/E Ratio:</strong> Not Available</div>
+                <div><strong>Dividend Yield:</strong> Not Available</div>
+            </div>
+            <div class="news-sentiment">
+                <p><strong>News & Sentiment:</strong> <span class="sentiment-positive">Mixed to Positive</span>. News about Bitcoin is often volatile. There's positive sentiment around increasing institutional adoption, the potential approval of Bitcoin ETFs, and its role as a hedge against inflation. However, there are also warnings about potential corrections and profit-taking after significant price surges.</p>
+                <p><strong>Suggestion:</strong> <span class="suggestion suggestion-hold">Hold</span>. You've seen a good gain on your Bitcoin investment. While cryptocurrencies are inherently volatile, the overall trend and institutional interest suggest continued potential. Be prepared for price fluctuations.</p>
+            </div>
+        </div>
+
+        <div class="asset-card">
+            <h3>SWIGGY <span>Stock</span></h3>
+            <div class="asset-details">
+                <div><strong>Quantity:</strong> 100</div>
+                <div><strong>Buy Price:</strong> INR 421.00</div>
+                <div><strong>Current Price:</strong> INR 436.10</div>
+                <div><strong>Invested:</strong> INR 42,100.00</div>
+                <div><strong>Current Value:</strong> INR 43,610.00</div>
+                <div><strong>Gain/Loss:</strong> <span class="gain-loss">INR 1,510.00</span></div>
+                <div><strong>Gain/Loss %:</strong> <span class="gain-loss">3.59%</span></div>
+                <div><strong>Market Cap:</strong> INR 999,032,940,825.00</div>
+                <div><strong>P/E Ratio:</strong> Not Available</div>
+                <div><strong>Dividend Yield:</strong> Not Available</div>
+            </div>
+            <div class="news-sentiment">
+                <p><strong>News & Sentiment:</strong> <span class="sentiment-neutral">Mixed</span>. Swiggy is actively expanding into new services like dining out and grocery delivery. While there's positive news about its valuation and funding rounds, there are also reports of continued losses despite revenue growth. The competitive landscape with Zomato remains intense.</p>
+                <p><strong>Suggestion:</strong> <span class="suggestion suggestion-hold">Hold</span>. You have a positive return on your Swiggy investment. The company is in a high-growth sector, but it's also a high-risk, high-reward proposition due to its unprofitability and intense competition. Monitor its path to profitability.</p>
+            </div>
+        </div>
+
+        <div class="asset-card">
+            <h3>ETH <span>Crypto</span></h3>
+            <div class="asset-details">
+                <div><strong>Quantity:</strong> 1</div>
+                <div><strong>Buy Price:</strong> INR 300,000.00</div>
+                <div><strong>Current Price:</strong> INR 389,855.84</div>
+                <div><strong>Invested:</strong> INR 300,000.00</div>
+                <div><strong>Current Value:</strong> INR 389,855.84</div>
+                <div><strong>Gain/Loss:</strong> <span class="gain-loss">INR 89,855.84</span></div>
+                <div><strong>Gain/Loss %:</strong> <span class="gain-loss">29.95%</span></div>
+                <div><strong>Market Cap:</strong> Not Available</div>
+                <div><strong>P/E Ratio:</strong> Not Available</div>
+                <div><strong>Dividend Yield:</strong> Not Available</div>
+            </div>
+            <div class="news-sentiment">
+                <p><strong>News & Sentiment:</strong> <span class="sentiment-positive">Mixed to Positive</span>. Ethereum, like Bitcoin, benefits from broader crypto market sentiment and institutional interest in decentralized finance (DeFi) and NFTs. Positive news often revolves around network upgrades (e.g., Shanghai upgrade), increased adoption, and its potential as a leading smart contract platform. Negative sentiment can arise from regulatory concerns, network congestion, or security vulnerabilities.</p>
+                <p><strong>Suggestion:</strong> <span class="suggestion suggestion-hold">Hold</span>. You've achieved a significant gain on your Ethereum investment. Ethereum is a major player in the crypto space with ongoing development and a wide range of applications. Like Bitcoin, it's subject to market volatility.</p>
+            </div>
+        </div>
+
+        <div class="asset-card">
+            <h3>PAYTM <span>Stock</span></h3>
+            <div class="asset-details">
+                <div><strong>Quantity:</strong> 100</div>
+                <div><strong>Buy Price:</strong> INR 1,000.00</div>
+                <div><strong>Current Price:</strong> INR 1,249.10</div>
+                <div><strong>Invested:</strong> INR 100,000.00</div>
+                <div><strong>Current Value:</strong> INR 124,910.00</div>
+                <div><strong>Gain/Loss:</strong> <span class="gain-loss">INR 24,910.00</span></div>
+                <div><strong>Gain/Loss %:</strong> <span class="gain-loss">24.91%</span></div>
+                <div><strong>Market Cap:</strong> INR 798,309,412,466.00</div>
+                <div><strong>P/E Ratio:</strong> 279.60</div>
+                <div><strong>Dividend Yield:</strong> Not Available</div>
+            </div>
+            <div class="news-sentiment">
+                <p><strong>News & Sentiment:</strong> <span class="sentiment-positive">Mixed to Positive</span>. Paytm has been in the news regarding its strong quarterly results, particularly in lending and merchant services. There's also sentiment around its expansion into new areas and strategic partnerships. However, there can be underlying concerns about intense competition in the fintech space and regulatory scrutiny.</p>
+                <p><strong>Suggestion:</strong> <span class="suggestion suggestion-hold">Hold</span>. You have a very good return on your Paytm investment. While the stock has seen significant volatility since its IPO, its recent performance and expansion into various financial services suggest potential for continued growth. Keep an eye on the competitive landscape and regulatory environment.</p>
+            </div>
+        </div>
+
+        <div class="asset-card">
+            <h3>BMWVENTLTD <span>Stock</span></h3>
+            <div class="asset-details">
+                <div><strong>Quantity:</strong> 2</div>
+                <div><strong>Buy Price:</strong> INR 60.00</div>
+                <div><strong>Current Price:</strong> INR 57.55</div>
+                <div><strong>Invested:</strong> INR 120.00</div>
+                <div><strong>Current Value:</strong> INR 115.10</div>
+                <div><strong>Gain/Loss:</strong> <span class="gain-loss negative">-INR 4.90</span></div>
+                <div><strong>Gain/Loss %:</strong> <span class="gain-loss negative">-4.08%</span></div>
+                <div><strong>Market Cap:</strong> INR 4,972,282,928.00</div>
+                <div><strong>P/E Ratio:</strong> 15.20</div>
+                <div><strong>Dividend Yield:</strong> Not Available</div>
+            </div>
+            <div class="news-sentiment">
+                <p><strong>News & Sentiment:</strong> <span class="sentiment-negative">Neutral to Negative</span>. Specific news or detailed sentiment analysis for "BMWVENTLTD" is limited, which itself can be a concern for investors. The available data suggests a small market cap and a slight unrealized loss. The lack of readily available in-depth news makes it difficult to assess the company's prospects.</p>
+                <p><strong>Suggestion:</strong> <span class="suggestion suggestion-hold">Hold/Monitor</span>. Given the small investment amount and limited information, it's difficult to make a strong recommendation. If this is a small speculative position, you might hold. However, if you're looking for more informed investments, the lack of news is a red flag. Consider researching this company further.</p>
+            </div>
+        </div>
+
+        <div class="asset-card">
+            <h3>RELIANCE <span>Stock</span></h3>
+            <div class="asset-details">
+                <div><strong>Quantity:</strong> 12</div>
+                <div><strong>Buy Price:</strong> INR 2,400.00</div>
+                <div><strong>Current Price:</strong> INR 1,376.50</div>
+                <div><strong>Invested:</strong> INR 28,800.00</div>
+                <div><strong>Current Value:</strong> INR 16,518.00</div>
+                <div><strong>Gain/Loss:</strong> <span class="gain-loss negative">-INR 12,282.00</span></div>
+                <div><strong>Gain/Loss %:</strong> <span class="gain-loss negative">-42.65%</span></div>
+                <div><strong>Market Cap:</strong> INR 18,641,706,150,424.00</div>
+                <div><strong>P/E Ratio:</strong> 22.86</div>
+                <div><strong>Dividend Yield:</strong> Not Available</div>
+            </div>
+            <div class="news-sentiment">
+                <p><strong>News & Sentiment:</strong> <span class="sentiment-negative">Negative</span>. Reliance Industries has experienced a significant loss of 42.65% from your buy price. While there's news about the company executing block trades and being a major constituent in the Nifty India Internet & Ecommerce Index, the sentiment is largely overshadowed by concerns. The biggest concern is the steep decline in your investment value. Although some reports suggest "financial prospects look decent" and positive EPS growth, these are directly contradicted by your substantial unrealized loss. There's also mention of a "harsh reality check" for a $26 billion IPO pipeline that even Reliance Jio and NSE can't escape, suggesting a challenging market environment. Reliance Capital (a separate entity, but within the broader Reliance group) is also facing delisting with no value for shareholders.</p>
+                <p><strong>Suggestion:</strong> <span class="suggestion suggestion-sell">Sell</span>. Given the substantial loss of over 42% and the mixed to negative news surrounding the company, it would be prudent to consider selling this stock to cut further losses. While there might be long-term growth prospects, the current indicators and your significant unrealized loss suggest a higher risk profile for this investment.</p>
+            </div>
+        </div>
+
+        <div class="charts">
+            <div class="chart-container">
+                <h2>Invested vs Current Value</h2>
+                <canvas id="investedVsCurrentChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h2>Allocation by Market Value</h2>
+                <canvas id="allocationPieChart"></canvas>
             </div>
         </div>
     </div>
 
     <script>
-        // Bar Chart: Invested vs Current Value
-        const investedVsCurrentCtx = document.getElementById('investedVsCurrentChart').getContext('2d');
-        new Chart(investedVsCurrentCtx, {
+        const portfolioData = [
+            {"Asset Type": "Stock", "Symbol": "HDFCBANK", "Quantity": 3, "Buy Price": 980, "Current Value": 2925, "Invested": 2940},
+            {"Asset Type": "Stock", "Symbol": "TCS", "Quantity": 10, "Buy Price": 3000, "Current Value": 30602, "Invested": 30000},
+            {"Asset Type": "Crypto", "Symbol": "BTC", "Quantity": 0.001, "Buy Price": 10000000, "Current Value": 10929.687750000001, "Invested": 10000},
+            {"Asset Type": "Stock", "Symbol": "SWIGGY", "Quantity": 100, "Buy Price": 421, "Current Value": 43610, "Invested": 42100},
+            {"Asset Type": "Crypto", "Symbol": "ETH", "Quantity": 1, "Buy Price": 300000, "Current Value": 389855.84150000004, "Invested": 300000},
+            {"Asset Type": "Stock", "Symbol": "PAYTM", "Quantity": 100, "Buy Price": 1000, "Current Value": 124909.99999999999, "Invested": 100000},
+            {"Asset Type": "Stock", "Symbol": "BMWVENTLTD", "Quantity": 2, "Buy Price": 60, "Current Value": 115.1, "Invested": 120},
+            {"Asset Type": "Stock", "Symbol": "RELIANCE", "Quantity": 12, "Buy Price": 2400, "Current Value": 16518, "Invested": 28800}
+        ];
+
+        const labels = portfolioData.map(asset => asset.Symbol);
+        const investedValues = portfolioData.map(asset => asset.Invested);
+        const currentValues = portfolioData.map(asset => asset["Current Value"]);
+        const allocationData = portfolioData.map(asset => asset["Current Value"]);
+
+        const ctxBar = document.getElementById('investedVsCurrentChart').getContext('2d');
+        new Chart(ctxBar, {
             type: 'bar',
             data: {
-                labels: ['Total Invested', 'Current Value'],
-                datasets: [{
-                    label: 'Amount (INR)',
-                    data: [415360.00, 619714.75],
-                    backgroundColor: ['#6200ee', '#03dac6'],
-                    borderColor: ['#3700b3', '#018786'],
-                    borderWidth: 1
-                }]
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Total Invested (INR)',
+                        data: investedValues,
+                        backgroundColor: 'rgba(0, 123, 255, 0.7)',
+                        borderColor: 'rgba(0, 123, 255, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Current Value (INR)',
+                        data: currentValues,
+                        backgroundColor: 'rgba(40, 167, 69, 0.7)',
+                        borderColor: 'rgba(40, 167, 69, 1)',
+                        borderWidth: 1
+                    }
+                ]
             },
             options: {
                 responsive: true,
                 scales: {
                     y: {
-                        beginAtZero: true,
-                        ticks: { color: '#e0e0e0' },
-                        grid: { color: '#3a3a3a' }
-                    },
-                    x: {
-                        ticks: { color: '#e0e0e0' },
-                        grid: { color: '#3a3a3a' }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: { color: '#e0e0e0' }
+                        beginAtZero: true
                     }
                 }
             }
         });
 
-        // Pie Chart: Allocation by Market Value
-        const allocationPieCtx = document.getElementById('allocationPieChart').getContext('2d');
-        new Chart(allocationPieCtx, {
+        const ctxPie = document.getElementById('allocationPieChart').getContext('2d');
+        new Chart(ctxPie, {
             type: 'pie',
             data: {
-                labels: ["HDFCBANK", "TCS", "BTC", "SWIGGY", "ETH", "PAYTM", "BMWVENTLTD", "RELIANCE"],
+                labels: labels,
                 datasets: [{
-                    data: [2925.00, 36722.40, 10930.18, 43610.00, 389341.18, 124910.00, 115.10, 16518.00],
+                    data: allocationData,
                     backgroundColor: [
-                        '#BB86FC', '#03DAC6', '#FF0266', '#C70039', '#FFC300', '#581845', '#900C3F', '#FF5733'
+                        '#007bff', '#28a745', '#ffc107', '#dc3545', '#6c757d', '#17a2b8', '#fd7e14', '#e83e8c', '#6f42c1', '#20c997'
                     ],
-                    hoverOffset: 4
+                    borderColor: '#fff',
+                    borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
                 plugins: {
                     legend: {
-                        labels: { color: '#e0e0e0' }
+                        position: 'right',
                     }
                 }
             }
         });
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // Apply dark mode based on user preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.body.classList.add('dark-mode');
+        }
     </script>
 </body>
 </html>
