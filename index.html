@@ -7,263 +7,293 @@
     <title>Stock Analysis Report</title>
     <style>
         :root {
-            --bg-color: #ffffff;
-            --text-color: #333333;
-            --card-bg: #f9f9f9;
+            --background-color: #f4f4f4;
+            --text-color: #333;
+            --card-background: #ffffff;
+            --border-color: #ddd;
             --header-bg: #4CAF50;
-            --header-text: #ffffff;
-            --border-color: #dddddd;
+            --header-text: white;
             --positive-color: #28a745;
             --negative-color: #dc3545;
             --neutral-color: #ffc107;
-            --recommend-buy: #28a745;
-            --recommend-hold: #ffc107;
-            --recommend-sell: #dc3545;
         }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #1a1a1a;
-                --text-color: #e0e0e0;
-                --card-bg: #2a2a2a;
-                --header-bg: #388e3c;
-                --header-text: #ffffff;
-                --border-color: #444444;
-            }
+        body.dark-mode {
+            --background-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --card-background: #2c2c2c;
+            --border-color: #444;
+            --header-bg: #388e3c;
+            --header-text: white;
+            --positive-color: #218838;
+            --negative-color: #c82333;
+            --neutral-color: #e0a800;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
             margin: 0;
             padding: 0;
-            line-height: 1.6;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
         }
-
         .container {
             max-width: 1200px;
             margin: 20px auto;
-            padding: 20px;
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 15px;
         }
-
         header {
             background-color: var(--header-bg);
             color: var(--header-text);
-            padding: 20px;
+            padding: 20px 0;
             text-align: center;
-            border-radius: 8px 8px 0 0;
-            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
-        h1, h2, h3 {
-            color: var(--header-bg);
-            text-align: center;
-            margin-bottom: 20px;
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
         }
-        
-        @media (prefers-color-scheme: dark) {
-            h1, h2, h3 {
-                color: var(--header-text); /* Ensure headers are visible in dark mode */
-            }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
         }
-
-
         .summary-card {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            gap: 15px;
-            margin-bottom: 30px;
+            background-color: var(--card-background);
             padding: 20px;
-            border: 1px solid var(--border-color);
             border-radius: 8px;
-            background-color: var(--card-bg);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .summary-item {
-            flex: 1;
-            min-width: 200px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
             text-align: center;
-            padding: 15px;
-            border-radius: 6px;
-            background-color: var(--bg-color);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
         }
-
-        .summary-item h3 {
+        .summary-card h3 {
             margin-top: 0;
-            font-size: 1em;
-            color: var(--text-color);
+            color: var(--header-bg);
         }
-
-        .summary-item p {
-            font-size: 1.5em;
-            font-weight: bold;
-            margin: 5px 0 0;
-        }
-
         .asset-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
-            margin-bottom: 30px;
+            margin-top: 30px;
         }
-
         .asset-card {
-            background-color: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
+            background-color: var(--card-background);
             padding: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: transform 0.2s ease-in-out;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
         }
-
-        .asset-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .asset-card h3 {
+        .asset-card h2 {
             margin-top: 0;
             color: var(--header-bg);
-            font-size: 1.5em;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
         }
-
         .asset-card p {
-            margin: 5px 0;
-            font-size: 0.95em;
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-
-        .asset-card strong {
-            color: var(--text-color);
+        .asset-card p strong {
+            flex-basis: 45%;
+            text-align: left;
         }
-
-        .sentiment.Positive { color: var(--positive-color); }
-        .sentiment.Negative { color: var(--negative-color); }
-        .sentiment.Neutral { color: var(--neutral-color); }
-
-        .recommendation.Buy { color: var(--recommend-buy); font-weight: bold; }
-        .recommendation.Hold { color: var(--recommend-hold); font-weight: bold; }
-        .recommendation.Sell { color: var(--recommend-sell); font-weight: bold; }
-
+        .asset-card p span {
+            flex-basis: 50%;
+            text-align: right;
+        }
+        .gain-loss {
+            font-weight: bold;
+        }
+        .gain {
+            color: var(--positive-color);
+        }
+        .loss {
+            color: var(--negative-color);
+        }
+        .sentiment.positive {
+            color: var(--positive-color);
+        }
+        .sentiment.negative {
+            color: var(--negative-color);
+        }
+        .sentiment.neutral {
+            color: var(--neutral-color);
+        }
+        .recommendation {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .recommendation.buy {
+            background-color: var(--positive-color);
+            color: white;
+        }
+        .recommendation.hold {
+            background-color: var(--neutral-color);
+            color: #333;
+        }
+        .recommendation.sell {
+            background-color: var(--negative-color);
+            color: white;
+        }
         .charts {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
+            justify-content: space-around;
             gap: 20px;
             margin-top: 30px;
         }
-
-        .chart-container {
-            flex: 1;
-            min-width: 300px;
-            background-color: var(--bg-color);
-            border: 1px solid var(--border-color);
+        .chart-card {
+            background-color: var(--card-background);
+            padding: 20px;
             border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
             text-align: center;
+            flex: 1 1 calc(50% - 20px);
+            min-width: 300px;
+            transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
         }
-
-        .chart-container img {
+        .chart-card img {
             max-width: 100%;
             height: auto;
             border-radius: 4px;
         }
-
-        .gain { color: var(--positive-color); }
-        .loss { color: var(--negative-color); }
-
+        .toggle-switch {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .toggle-switch label {
+            display: block;
+            width: 60px;
+            height: 30px;
+            background-color: #ccc;
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .toggle-switch input[type="checkbox"] {
+            display: none;
+        }
+        .toggle-switch label::after {
+            content: '';
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background-color: white;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+        .toggle-switch input[type="checkbox"]:checked + label {
+            background-color: #66bb6a;
+        }
+        .toggle-switch input[type="checkbox"]:checked + label::after {
+            transform: translateX(30px);
+        }
         @media (max-width: 768px) {
-            .summary-item {
-                flex: 1 1 100%;
-            }
-            .asset-grid {
-                grid-template-columns: 1fr;
-            }
             .charts {
                 flex-direction: column;
+            }
+            .chart-card {
+                flex: 1 1 100%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Stock Analysis Report</h1>
-        </header>
-
-        <section class="summary">
-            <h2>Overall Portfolio Summary</h2>
-            <div class="summary-card">
-                <div class="summary-item">
-                    <h3>Total Invested</h3>
-                    <p>₹18,350.00</p>
-                </div>
-                <div class="summary-item">
-                    <h3>Current Value</h3>
-                    <p>₹18,496.40</p>
-                </div>
-                <div class="summary-item">
-                    <h3>Overall Gain/Loss</h3>
-                    <p class="gain">₹146.40 (0.80%)</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="asset-details">
-            <h2>Asset Details</h2>
-            <div class="asset-grid">
-                
-                <div class="asset-card">
-                    <h3>TATASTEEL (Stock)</h3>
-                    <p><strong>Quantity:</strong> 2</p>
-                    <p><strong>Buy Price:</strong> ₹175.00</p>
-                    <p><strong>Current Price:</strong> ₹173.20</p>
-                    <p><strong>Invested:</strong> ₹350.00</p>
-                    <p><strong>Current Value:</strong> ₹346.40</p>
-                    <p><strong>Gain/Loss:</strong> <span class="loss">₹-3.60 (-1.03%)</span></p>
-                    <p><strong>Market Cap:</strong> ₹2,161,023,885,919.00</p>
-                    <p><strong>P/E Ratio:</strong> 47.60</p>
-                    <p><strong>Dividend Yield:</strong> Not Available</p>
-                    <p><strong>Sentiment:</strong> <span class="sentiment Positive">Positive</span></p>
-                    <p style="font-size: 0.85em; color: var(--text-color); opacity: 0.8;"><em>Reasoning: Positive keywords like 'breakout buys' were found. Positive keywords like 'poised for upside' were found. Positive keywords like 'surge' were found. Positive keywords like 'gains' were found. Positive keywords like 'rise' were found. Positive keywords like 'strong' were found. Positive keywords like 'good' were found. Positive keywords like 'higher' were found. Positive keywords like 'up' were found. Positive keywords like 'buy' were found. Positive keywords like 'target price' were found. Positive keywords like 'analysts suggest buying' were found. Positive keywords like 'strong q1 fy26 show' were found. Positive keywords like 'healthy q4 performance' were found. Positive keywords like 'top picks' were found. Positive keywords like 'potential gains' were found. Positive keywords like 'trades in green' were found. Positive keywords like '52-week high' were found. Positive keywords like 'up to rs 200' were found. Positive keywords like 'production rises' were found. Positive keywords like 'positive' were found. Positive keywords like 'jump' were found. Positive keywords like 'shine' were found. Positive keywords like 'lead gains' were found. Positive keywords like 'increase' were found. Positive keywords like 'dividend announced' were found. Positive keywords like 'gains' were found. Negative keywords like 'fail' were found. Negative keywords like 'flat' were found. Negative keywords like 'some confidence is lacking' were found. Negative keywords like 'drop' were found. Negative keywords like 'suspended' were found. Negative keywords like 'tanks' were found. Negative keywords like 'slip' were found. Negative keywords like 'debt level pose a problem' were found.</em></p>
-                    <p><strong>Recommendation:</strong> <span class="recommendation Hold">Hold</span></p>
-                </div>
-
-                <div class="asset-card">
-                    <h3>TCS (Stock)</h3>
-                    <p><strong>Quantity:</strong> 6</p>
-                    <p><strong>Buy Price:</strong> ₹3,000.00</p>
-                    <p><strong>Current Price:</strong> ₹3,025.00</p>
-                    <p><strong>Invested:</strong> ₹18,000.00</p>
-                    <p><strong>Current Value:</strong> ₹18,150.00</p>
-                    <p><strong>Gain/Loss:</strong> <span class="gain">₹150.00 (0.83%)</span></p>
-                    <p><strong>Market Cap:</strong> ₹10,907,452,731,635.00</p>
-                    <p><strong>P/E Ratio:</strong> 22.22</p>
-                    <p><strong>Dividend Yield:</strong> Not Available</p>
-                    <p><strong>Sentiment:</strong> <span class="sentiment Positive">Positive</span></p>
-                    <p style="font-size: 0.85em; color: var(--text-color); opacity: 0.8;"><em>Reasoning: Positive keywords like 'strong' were found. Positive keywords like 'firm opening' were found. Positive keywords like 'firm' were found. Positive keywords like 'partners' were found. Positive keywords like 'transform' were found. Positive keywords like 'boost' were found. Positive keywords like 'rises' were found. Positive keywords like 'strategic wins' were found. Positive keywords like 'boasts of strong institutional backing' were found. Positive keywords like 'beats estimates' were found. Positive keywords like 'dominance' were found. Positive keywords like 'strong' were found. Positive keywords like 'positive' were found. Positive keywords like 'lead gains' were found. Positive keywords like 'strategic partner' were found. Positive keywords like 'new platform' were found. Positive keywords like 'partners with government' were found. Positive keywords like 'increase' were found. Positive keywords like 'upskill' were found. Positive keywords like 'collaborates' were found. Positive keywords like 'dividend announced' were found. Positive keywords like 'jumps' were found. Positive keywords like 'bullish' were found. Positive keywords like 'rises' were found. Positive keywords like 'analysts revise target price upwards' were found. Positive keywords like 'partner' were found. Positive keywords like 'highs' were found. Positive keywords like 'beats street estimates' were found. Positive keywords like 'gains' were found. Negative keywords like 'lost' were found. Negative keywords like 'forcing people to resign' were found. Negative keywords like 'drag' were found. Negative keywords like 'insufficient growth' were found. Negative keywords like 'hampers' were found. Negative keywords like 'weak' were found. Negative keywords like 'fall' were found. Negative keywords like 'drag' were found. Negative keywords like 'slip' were found. Negative keywords like 'dip' were found. Negative keywords like 'low' were found. Negative keywords like 'drops' were found. Negative keywords like 'market sell-off' were found.</em></p>
-                    <p><strong>Recommendation:</strong> <span class="recommendation Hold">Hold</span></p>
-                </div>
-            </div>
-        </section>
-
-        <section class="charts">
-            <h2>Portfolio Visualization</h2>
-            <div class="chart-container">
-                <h3>Invested vs. Current Value</h3>
-                <img src="https://quickchart.io/chart?c=%7B%27type%27%3A+%27bar%27%2C+%27data%27%3A+%7B%27labels%27%3A+%5B%27TATASTEEL%27%2C+%27TCS%27%5D%2C+%27datasets%27%3A+%5B%7B%27label%27%3A+%27Invested+Value%27%2C+%27data%27%3A+%5B350.0%2C+18000.0%5D%2C+%27backgroundColor%27%3A+%27rgba%2875%2C+192%2C+192%2C+0.6%29%27%7D%2C+%7B%27label%27%3A+%27Current+Value%27%2C+%27data%27%3A+%5B346.4%2C+18150.0%5D%2C+%27backgroundColor%27%3A+%27rgba%28153%2C+102%2C+255%2C+0.6%29%27%7D%5D%7D%2C+%27options%27%3A+%7B%27responsive%27%3A+True%2C+%27scales%27%3A+%7B%27x%27%3A+%7B%27stacked%27%3A+False%7D%2C+%27y%27%3A+%7B%27stacked%27%3A+False%7D%7D%7D%7D" alt="Invested vs Current Value Bar Chart">
-            </div>
-            <div class="chart-container">
-                <h3>Allocation by Market Value</h3>
-                <img src="https://quickchart.io/chart?c=%7B%27type%27%3A+%27pie%27%2C+%27data%27%3A+%7B%27labels%27%3A+%5B%27TATASTEEL%27%2C+%27TCS%27%5D%2C+%27datasets%27%3A+%5B%7B%27data%27%3A+%5B2161023885919.0%2C+10907452731635.0%5D%2C+%27backgroundColor%27%3A+%5B%27%23FF6384%27%2C+%27%2336A2EB%27%2C+%27%23FFCE56%27%2C+%27%234BC0C0%27%2C+%27%239966CC%27%5D%7D%5D%7D%7D" alt="Allocation by Market Value Pie Chart">
-            </div>
-        </section>
+    <div class="toggle-switch">
+        <input type="checkbox" id="dark-mode-toggle">
+        <label for="dark-mode-toggle"></label>
     </div>
+    <header>
+        <h1>Stock Analysis Report</h1>
+    </header>
+    <div class="container">
+        <div class="summary-cards">
+            <div class="summary-card">
+                <h3>Total Invested</h3>
+                <p>₹18,350.00</p>
+            </div>
+            <div class="summary-card">
+                <h3>Current Value</h3>
+                <p>₹18,512.24</p>
+            </div>
+            <div class="summary-card">
+                <h3>Overall Gain/Loss</h3>
+                <p class="gain">₹162.24 (0.88%)</p>
+            </div>
+        </div>
+
+        <div class="asset-grid">
+            <div class="asset-card">
+                <h2>TATASTEEL</h2>
+                <p><strong>Asset Type:</strong> <span>Stock</span></p>
+                <p><strong>Quantity:</strong> <span>2</span></p>
+                <p><strong>Buy Price:</strong> <span>₹175.00</span></p>
+                <p><strong>Current Price:</strong> <span>₹173.62</span></p>
+                <p><strong>Market Cap:</strong> <span>₹2,167,889,865,516.00</span></p>
+                <p><strong>P/E Ratio:</strong> <span>47.64</span></p>
+                <p><strong>Dividend Yield:</strong> <span>Not Available</span></p>
+                <p><strong>Invested:</strong> <span>₹350.00</span></p>
+                <p><strong>Current Value:</strong> <span>₹347.24</span></p>
+                <p><strong>Gain/Loss:</strong> <span class="gain-loss loss">₹-2.76 (-0.79%)</span></p>
+                <p><strong>Sentiment:</strong> <span class="sentiment positive">Positive</span></p>
+                <p><strong>Reasoning:</strong> <span>Several analyst buy recommendations, strong Q1 FY26 earnings beating expectations, and mentions of shares hitting 52-week highs indicate a positive outlook despite some recent price dips.</span></p>
+                <p><strong>Recommendation:</strong> <span class="recommendation buy">Buy</span></p>
+            </div>
+            <div class="asset-card">
+                <h2>TCS</h2>
+                <p><strong>Asset Type:</strong> <span>Stock</span></p>
+                <p><strong>Quantity:</strong> <span>6</span></p>
+                <p><strong>Buy Price:</strong> <span>₹3,000.00</span></p>
+                <p><strong>Current Price:</strong> <span>₹3,027.50</span></p>
+                <p><strong>Market Cap:</strong> <span>₹10,953,764,447,500.00</span></p>
+                <p><strong>P/E Ratio:</strong> <span>22.23</span></p>
+                <p><strong>Dividend Yield:</strong> <span>Not Available</span></p>
+                <p><strong>Invested:</strong> <span>₹18,000.00</span></p>
+                <p><strong>Current Value:</strong> <span>₹18,165.00</span></p>
+                <p><strong>Gain/Loss:</strong> <span class="gain-loss gain">₹165.00 (0.92%)</span></p>
+                <p><strong>Sentiment:</strong> <span class="sentiment negative">Negative</span></p>
+                <p><strong>Reasoning:</strong> <span>Significant and recurring news about layoffs, headcount reduction, and missed Q2 earnings estimates create a negative sentiment, overshadowing positive news about AI investments and acquisitions.</span></p>
+                <p><strong>Recommendation:</strong> <span class="recommendation sell">Sell</span></p>
+            </div>
+        </div>
+
+        <div class="charts">
+            <div class="chart-card">
+                <h3>Portfolio Value (Invested vs. Current)</h3>
+                <img src="https://quickchart.io/chart?c={type:'bar',data:{labels:['Invested','Current Value'],datasets:[{label:'Value',data:[18350,18512.24],backgroundColor:['#4285F4','#34A853']}]},options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{labels:{color:'white'}}, title:{display:true,text:'Portfolio Value (Invested vs. Current)',color:'white'}}}},width:500,height:300}" alt="Bar chart of Invested vs Current Value">
+            </div>
+            <div class="chart-card">
+                <h3>Allocation by Current Market Value</h3>
+                <img src="https://quickchart.io/chart?c={type:'pie',data:{labels:['TATASTEEL','TCS'],datasets:[{data:[347.24,18165],backgroundColor:['#FBBC04','#EA4335']}]},options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{labels:{color:'white'}}, title:{display:true,text:'Allocation by Current Market Value',color:'white'}}}},width:500,height:300}" alt="Pie chart of Allocation by Market Value">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        darkModeToggle.addEventListener('change', () => {
+            document.body.classList.toggle('dark-mode', darkModeToggle.checked);
+        });
+
+        // Set initial state based on user preference or local storage
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            darkModeToggle.checked = true;
+            document.body.classList.add('dark-mode');
+        }
+    </script>
 </body>
 </html>
