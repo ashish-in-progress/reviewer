@@ -1,384 +1,291 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investment Portfolio Report</title>
-    <style>
-        :root {
-            --background-color: #f4f4f4;
-            --text-color: #333;
-            --card-background: #fff;
-            --header-bg: #6a0dad; /* Purple */
-            --header-text: #fff;
-            --border-color: #ddd;
-            --gain-color: #28a745; /* Green */
-            --loss-color: #dc3545; /* Red */
-            --chart-bar-invested: #007bff; /* Blue */
-            --chart-bar-current: #28a745; /* Green */
-        }
 
-        body.dark-mode {
-            --background-color: #1a1a2e;
-            --text-color: #e0e0e0;
-            --card-background: #16213e;
-            --header-bg: #0f3460;
-            --header-text: #e0e0e0;
-            --border-color: #0d1b2a;
-            --gain-color: #90ee90; /* Light Green */
-            --loss-color: #ff6347; /* Tomato */
-            --chart-bar-invested: #4a90e2;
-            --chart-bar-current: #7ed321;
-        }
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Investment Portfolio Report</title>
+        <style>
+            :root {
+                --background-color: #f4f4f4;
+                --text-color: #333;
+                --card-background: #fff;
+                --header-bg: #6a0dad; /* Purple */
+                --header-text: #fff;
+                --border-color: #ddd;
+                --gain-color: #28a745; /* Green */
+                --loss-color: #dc3545; /* Red */
+                --chart-bar-invested: #007bff; /* Blue */
+                --chart-bar-current: #28a745; /* Green */
+            }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            transition: background-color 0.3s, color 0.3s;
-        }
+            body.dark-mode {
+                --background-color: #1a1a2e;
+                --text-color: #e0e0e0;
+                --card-background: #16213e;
+                --header-bg: #0f3460;
+                --header-text: #e0e0e0;
+                --border-color: #0d1b2a;
+                --gain-color: #90ee90; /* Light Green */
+                --loss-color: #ff6347; /* Tomato */
+                --chart-bar-invested: #4a90e2;
+                --chart-bar-current: #7ed321;
+            }
 
-        header {
-            background-color: var(--header-bg);
-            color: var(--header-text);
-            padding: 20px;
-            text-align: center;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background-color: var(--background-color);
+                color: var(--text-color);
+                line-height: 1.6;
+                transition: background-color 0.3s, color 0.3s;
+            }
 
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            display: grid;
-            gap: 20px;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        }
+            header {
+                background-color: var(--header-bg);
+                color: var(--header-text);
+                padding: 20px;
+                text-align: center;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
 
-        .card {
-            background-color: var(--card-background);
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            padding: 20px;
-            border: 1px solid var(--border-color);
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-
-        .card h2 {
-            color: var(--header-bg);
-            margin-top: 0;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-
-        .card p {
-            margin: 5px 0;
-        }
-
-        .summary-card {
-            grid-column: 1 / -1;
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .summary-item {
-            text-align: center;
-            flex: 1;
-            min-width: 180px;
-            margin: 10px;
-            padding: 15px;
-            background-color: var(--background-color);
-            border-radius: 8px;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .summary-item strong {
-            display: block;
-            font-size: 1.2em;
-            margin-bottom: 5px;
-        }
-
-        .summary-item .value {
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-
-        .gain {
-            color: var(--gain-color);
-        }
-
-        .loss {
-            color: var(--loss-color);
-        }
-
-        .chart-container {
-            grid-column: 1 / -1;
-            background-color: var(--card-background);
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            padding: 20px;
-            border: 1px solid var(--border-color);
-            margin-top: 20px;
-        }
-
-        .chart-container h2 {
-            text-align: center;
-            color: var(--header-bg);
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-
-        .bar-chart-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            font-size: 0.9em;
-        }
-
-        .bar-chart-item span {
-            width: 100px; /* Label width */
-            margin-right: 10px;
-            font-weight: bold;
-        }
-
-        .bar-container {
-            flex-grow: 1;
-            display: flex;
-            height: 20px;
-            background-color: #eee;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .bar-invested {
-            background-color: var(--chart-bar-invested);
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            color: white;
-            padding-right: 5px;
-            box-sizing: border-box;
-            font-size: 0.8em;
-        }
-
-        .bar-current {
-            background-color: var(--chart-bar-current);
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            color: white;
-            padding-right: 5px;
-            box-sizing: border-box;
-            font-size: 0.8em;
-        }
-
-        .pie-chart-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-
-        .pie-chart-slice {
-            margin: 5px 15px;
-            display: flex;
-            align-items: center;
-        }
-
-        .pie-chart-color {
-            width: 15px;
-            height: 15px;
-            border-radius: 3px;
-            margin-right: 8px;
-        }
-
-        .dark-mode-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: var(--card-background);
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            z-index: 1000;
-            font-size: 0.9em;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        @media (max-width: 768px) {
             .container {
-                grid-template-columns: 1fr;
+                max-width: 1200px;
+                margin: auto;
+                display: grid;
+                gap: 20px;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             }
+
+            .card {
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                padding: 20px;
+                border: 1px solid var(--border-color);
+                transition: background-color 0.3s, border-color 0.3s;
+            }
+
+            .card h2 {
+                color: var(--header-bg);
+                margin-top: 0;
+                border-bottom: 2px solid var(--border-color);
+                padding-bottom: 10px;
+                margin-bottom: 15px;
+            }
+
+            .card p {
+                margin: 5px 0;
+            }
+
+            .summary-card {
+                grid-column: 1 / -1;
+                display: flex;
+                justify-content: space-around;
+                flex-wrap: wrap;
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
             .summary-item {
-                flex-basis: 100%;
+                text-align: center;
+                flex: 1;
+                min-width: 180px;
+                margin: 10px;
+                padding: 15px;
+                background-color: var(--background-color);
+                border-radius: 8px;
+                box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
             }
-        }
-    </style>
-</head>
-<body class="dark-mode">
-    <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
-    <header>
-        <h1>Investment Portfolio Report</h1>
-    </header>
 
-    <div class="container">
-        <div class="card summary-card">
-            <div class="summary-item">
-                <strong>Total Invested</strong>
-                <span class="value">₹75,100.00</span>
+            .summary-item strong {
+                display: block;
+                font-size: 1.2em;
+                margin-bottom: 5px;
+            }
+
+            .summary-item .value {
+                font-size: 1.5em;
+                font-weight: bold;
+            }
+
+            .gain {
+                color: var(--gain-color);
+            }
+
+            .loss {
+                color: var(--loss-color);
+            }
+
+            .chart-container {
+                grid-column: 1 / -1;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                padding: 20px;
+                border: 1px solid var(--border-color);
+                margin-top: 20px;
+            }
+
+            .chart-container h2 {
+                text-align: center;
+                color: var(--header-bg);
+                border-bottom: 2px solid var(--border-color);
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+            }
+
+            .bar-chart-item {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+                font-size: 0.9em;
+            }
+
+            .bar-chart-item span {
+                width: 100px; /* Label width */
+                margin-right: 10px;
+                font-weight: bold;
+                flex-shrink: 0; /* Prevent label from shrinking */
+            }
+
+            .bar-container {
+                flex-grow: 1;
+                display: flex;
+                height: 30px; /* Increased height for better visibility */
+                background-color: #eee;
+                border-radius: 3px;
+                overflow: hidden;
+                position: relative; /* For absolute positioning of text */
+                color: black; /* Default text color for bars */
+            }
+
+            .bar-invested, .bar-current {
+                position: absolute; /* Position bars over each other */
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                padding-right: 5px;
+                box-sizing: border-box;
+                font-size: 0.8em;
+                color: white; /* Text color inside bars */
+                white-space: nowrap; /* Prevent text wrapping */
+                overflow: hidden; /* Hide overflow text */
+            }
+
+            .bar-invested {
+                background-color: var(--chart-bar-invested);
+                opacity: 0.7; /* Make invested bar slightly transparent */
+                left: 0;
+            }
+
+            .bar-current {
+                background-color: var(--chart-bar-current);
+                left: 0; /* Align current bar to the left too */
+            }
+
+            .pie-chart-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-wrap: wrap;
+                margin-top: 20px;
+            }
+
+            .pie-chart-slice {
+                margin: 5px 15px;
+                display: flex;
+                align-items: center;
+            }
+
+            .pie-chart-color {
+                width: 15px;
+                height: 15px;
+                border-radius: 3px;
+                margin-right: 8px;
+            }
+
+            .dark-mode-toggle {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: var(--card-background);
+                color: var(--text-color);
+                border: 1px solid var(--border-color);
+                padding: 10px 15px;
+                border-radius: 5px;
+                cursor: pointer;
+                z-index: 1000;
+                font-size: 0.9em;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                transition: background-color 0.3s, color 0.3s;
+            }
+
+            @media (max-width: 768px) {
+                .container {
+                    grid-template-columns: 1fr;
+                }
+                .summary-item {
+                    flex-basis: 100%;
+                }
+                .bar-chart-item span {
+                    width: 80px;
+                }
+            }
+        </style>
+    </head>
+    <body class="dark-mode">
+        <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+        <header>
+            <h1>Investment Portfolio Report</h1>
+        </header>
+
+        <div class="container">
+            <div class="card summary-card">
+                <div class="summary-item">
+                    <strong>Total Invested</strong>
+                    <span class="value">₹0.00</span>
+                </div>
+                <div class="summary-item">
+                    <strong>Current Value</strong>
+                    <span class="value">₹0.00</span>
+                </div>
+                <div class="summary-item">
+                    <strong>Overall Gain/Loss</strong>
+                    <span class="value gain">₹0.00</span>
+                </div>
+                <div class="summary-item">
+                    <strong>Overall Return %</strong>
+                    <span class="value gain">0.00%</span>
+                </div>
             </div>
-            <div class="summary-item">
-                <strong>Current Value</strong>
-                <span class="value">₹87,349.07</span>
+
+            <div class="chart-container">
+                <h2>Investment vs. Current Value</h2>
+                
             </div>
-            <div class="summary-item">
-                <strong>Overall Gain/Loss</strong>
-                <span class="value gain">₹12,249.07</span>
+
+            <div class="chart-container">
+                <h2>Allocation by Market Value</h2>
+                <div class="pie-chart-container">
+                    
+                </div>
             </div>
         </div>
 
-        <div class="card">
-            <h2>HDFCBANK (Stock)</h2>
-            <p><strong>Quantity:</strong> 3</p>
-            <p><strong>Buy Price:</strong> ₹2,400.00</p>
-            <p><strong>Invested:</strong> ₹7,200.00</p>
-            <p><strong>Current Price:</strong> ₹980.55</p>
-            <p><strong>Current Value:</strong> ₹2,941.65</p>
-            <p class="loss"><strong>Gain/Loss:</strong> -₹4,258.35</p>
-            <p class="loss"><strong>Return %:</strong> -59.14%</p>
-            <p><strong>Market Cap:</strong> ₹15,065,624,232,910.00</p>
-            <p><strong>P/E Ratio:</strong> 21.36</p>
-            <p><strong>Dividend Yield:</strong> Not Available</p>
-            <p><strong>Sentiment:</strong> Negative news surrounding HDFC Bank in the past week could be impacting its performance.</p>
-            <p><strong>Suggestion:</strong> <span class="loss">Sell</span> - The significant loss and negative sentiment suggest a potential downward trend.</p>
-        </div>
-
-        <div class="card">
-            <h2>TCS (Stock)</h2>
-            <p><strong>Quantity:</strong> 10</p>
-            <p><strong>Buy Price:</strong> ₹3,000.00</p>
-            <p><strong>Invested:</strong> ₹30,000.00</p>
-            <p><strong>Current Price:</strong> ₹3,052.90</p>
-            <p><strong>Current Value:</strong> ₹30,529.00</p>
-            <p class="gain"><strong>Gain/Loss:</strong> ₹529.00</p>
-            <p class="gain"><strong>Return %:</strong> 1.76%</p>
-            <p><strong>Market Cap:</strong> ₹11,044,940,113,635.00</p>
-            <p><strong>P/E Ratio:</strong> 22.40</p>
-            <p><strong>Dividend Yield:</strong> Not Available</p>
-            <p><strong>Sentiment:</strong> News sentiment for TCS is neutral.</p>
-            <p><strong>Suggestion:</strong> Hold - While there's a slight gain, neutral sentiment suggests a stable outlook.</p>
-        </div>
-
-        <div class="card">
-            <h2>BTC (Crypto)</h2>
-            <p><strong>Quantity:</strong> 0.001</p>
-            <p><strong>Buy Price:</strong> ₹900,000.00</p>
-            <p><strong>Invested:</strong> ₹900.00</p>
-            <p><strong>Current Price:</strong> ₹10,758,416.24</p>
-            <p><strong>Current Value:</strong> ₹10,758.42</p>
-            <p class="gain"><strong>Gain/Loss:</strong> ₹9,858.42</p>
-            <p class="gain"><strong>Return %:</strong> 1095.38%</p>
-            <p><strong>Market Cap:</strong> Not Available</p>
-            <p><strong>P/E Ratio:</strong> Not Available</p>
-            <p><strong>Dividend Yield:</strong> Not Available</p>
-            <p><strong>Sentiment:</strong> Not Applicable for Crypto</p>
-            <p><strong>Suggestion:</strong> Hold - Significant gains, but crypto markets are volatile. Consider taking some profits if this is a substantial portion of your portfolio.</p>
-        </div>
-
-        <div class="card">
-            <h2>SWIGGY (Stock)</h2>
-            <p><strong>Quantity:</strong> 100</p>
-            <p><strong>Buy Price:</strong> ₹390.00</p>
-            <p><strong>Invested:</strong> ₹39,000.00</p>
-            <p><strong>Current Price:</strong> ₹431.20</p>
-            <p><strong>Current Value:</strong> ₹43,120.00</p>
-            <p class="gain"><strong>Gain/Loss:</strong> ₹4,120.00</p>
-            <p class="gain"><strong>Return %:</strong> 10.56%</p>
-            <p><strong>Market Cap:</strong> ₹986,565,018,750.00</p>
-            <p><strong>P/E Ratio:</strong> Not Available</p>
-            <p><strong>Dividend Yield:</strong> Not Available</p>
-            <p><strong>Sentiment:</strong> News sentiment for Swiggy is neutral.</p>
-            <p><strong>Suggestion:</strong> Hold - Positive returns and neutral sentiment indicate a stable performance.</p>
-        </div>
-
-        <div class="chart-container">
-            <h2>Investment vs. Current Value</h2>
-            <div class="bar-chart-item">
-                <span>HDFCBANK</span>
-                <div class="bar-container">
-                    <div class="bar-invested" style="width: 14.65%;">₹7,200.00</div>
-                    <div class="bar-current" style="width: 5.99%;">₹2,941.65</div>
-                </div>
-            </div>
-            <div class="bar-chart-item">
-                <span>TCS</span>
-                <div class="bar-container">
-                    <div class="bar-invested" style="width: 61.16%;">₹30,000.00</div>
-                    <div class="bar-current" style="width: 62.14%;">₹30,529.00</div>
-                </div>
-            </div>
-            <div class="bar-chart-item">
-                <span>BTC</span>
-                <div class="bar-container">
-                    <div class="bar-invested" style="width: 1.83%;">₹900.00</div>
-                    <div class="bar-current" style="width: 21.90%;">₹10,758.42</div>
-                </div>
-            </div>
-            <div class="bar-chart-item">
-                <span>SWIGGY</span>
-                <div class="bar-container">
-                    <div class="bar-invested" style="width: 79.43%;">₹39,000.00</div>
-                    <div class="bar-current" style="width: 87.79%;">₹43,120.00</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="chart-container">
-            <h2>Allocation by Market Value</h2>
-            <div class="pie-chart-container">
-                <div class="pie-chart-slice">
-                    <div class="pie-chart-color" style="background-color: #FF6384;"></div>
-                    HDFCBANK: 3.37%
-                </div>
-                <div class="pie-chart-slice">
-                    <div class="pie-chart-color" style="background-color: #36A2EB;"></div>
-                    TCS: 34.95%
-                </div>
-                <div class="pie-chart-slice">
-                    <div class="pie-chart-color" style="background-color: #FFCD56;"></div>
-                    BTC: 12.32%
-                </div>
-                <div class="pie-chart-slice">
-                    <div class="pie-chart-color" style="background-color: #4BC0C0;"></div>
-                    SWIGGY: 49.36%
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-        }
-        // Set initial mode to dark mode as requested
-        document.addEventListener('DOMContentLoaded', () => {
-            document.body.classList.add('dark-mode');
-        });
-    </script>
-</body>
-</html>
+        <script>
+            function toggleDarkMode() {
+                document.body.classList.toggle('dark-mode');
+            }
+            // Set initial mode to dark mode as requested
+            document.addEventListener('DOMContentLoaded', () => {
+                document.body.classList.add('dark-mode');
+            });
+        </script>
+    </body>
+    </html>
+    
