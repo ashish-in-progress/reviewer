@@ -1,400 +1,272 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Portfolio Report</title>
+    <title>Stock Analysis Report</title>
     <style>
+        :root {
+            --background-color: #f4f4f4;
+            --text-color: #333;
+            --card-background: #fff;
+            --header-background: #6200ea;
+            --header-text: #fff;
+            --positive-color: #4CAF50;
+            --negative-color: #f44336;
+            --neutral-color: #ff9800;
+            --border-color: #ddd;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #121212;
+                --text-color: #e0e0e0;
+                --card-background: #1e1e1e;
+                --header-background: #bb86fc;
+                --header-text: #000;
+                --border-color: #333;
+            }
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
-            background-color: #f4f7f6;
-            color: #333;
-            transition: background-color 0.3s, color 0.3s;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
         }
-        body.dark-mode {
-            background-color: #2c2c2c;
-            color: #e0e0e0;
-        }
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s, box-shadow 0.3s;
-        }
-        body.dark-mode .container {
-            background-color: #3a3a3a;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-        h1, h2 {
-            color: #007bff;
-            text-align: center;
-            margin-bottom: 25px;
-            font-weight: 600;
-        }
-        body.dark-mode h1, body.dark-mode h2 {
-            color: #6daff7;
-        }
-        .summary-cards {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            margin-bottom: 30px;
-        }
-        .summary-card {
-            background-color: #e9f7fe;
-            border: 1px solid #cce5ff;
-            border-left: 5px solid #007bff;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 10px;
-            flex: 1;
-            min-width: 280px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            transition: background-color 0.3s, border-color 0.3s, box-shadow 0 0.3s;
-        }
-        body.dark-mode .summary-card {
-            background-color: #4a4a4a;
-            border: 1px solid #5e5e5e;
-            border-left-color: #6daff7;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-        .summary-card h3 {
-            margin-top: 0;
-            color: #0056b3;
-            font-size: 1.1em;
-        }
-        body.dark-mode .summary-card h3 {
-            color: #a0d4ff;
-        }
-        .summary-card p {
-            font-size: 1.6em;
-            font-weight: 700;
-            margin: 10px 0 0;
-            color: #007bff;
-        }
-        body.dark-mode .summary-card p {
-            color: #6daff7;
-        }
-        .gain-positive { color: #28a745; }
-        .gain-negative { color: #dc3545; }
 
-        .asset-card {
-            background-color: #f8f9fa;
-            border: 1px solid #e2e6ea;
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: var(--card-background);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        header {
+            background-color: var(--header-background);
+            color: var(--header-text);
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 20px;
+        }
+
+        h1, h2, h3 {
+            color: var(--header-background);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        @media (prefers-color-scheme: dark) {
+            h1, h2, h3 {
+                color: var(--header-background);
+            }
+        }
+
+        .section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .summary-cards, .asset-cards {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
-            align-items: center;
-            transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+            justify-content: center;
+            margin-bottom: 20px;
         }
-        body.dark-mode .asset-card {
-            background-color: #4a4a4a;
-            border: 1px solid #5e5e5e;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-        .asset-card h3 {
-            flex-basis: 100%;
-            margin-top: 0;
-            color: #343a40;
-            font-size: 1.5em;
-            font-weight: 600;
-        }
-        body.dark-mode .asset-card h3 {
-            color: #f8f9fa;
-        }
-        .asset-details {
+
+        .summary-card, .asset-card {
+            background-color: var(--background-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
             flex: 1;
-            min-width: 250px;
+            min-width: 280px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-        .asset-details p {
-            margin: 8px 0;
-            font-size: 0.95em;
+
+        .asset-card h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--header-background);
+            text-align: left;
+        }
+
+        .asset-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .asset-card ul li {
+            margin-bottom: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .asset-details p strong {
-            color: #555;
-            font-weight: 500;
-            min-width: 120px;
+
+        .asset-card ul li strong {
+            flex-basis: 40%;
+            text-align: left;
         }
-        body.dark-mode .asset-details p strong {
-            color: #d0d0d0;
-        }
-        .asset-details p span {
+
+        .asset-card ul li span {
+            flex-basis: 55%;
             text-align: right;
-            color: #333;
         }
-        body.dark-mode .asset-details p span {
-            color: #e0e0e0;
+
+        .value-positive {
+            color: var(--positive-color);
+            font-weight: bold;
         }
-        .recommendation {
-            flex-basis: 100%;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px dashed #ced4da;
-            font-style: italic;
+
+        .value-negative {
+            color: var(--negative-color);
+            font-weight: bold;
         }
-        body.dark-mode .recommendation {
-            border-top-color: #6c757d;
-        }
-        .recommendation strong {
-            color: #007bff;
-        }
-        body.dark-mode .recommendation strong {
-            color: #6daff7;
+
+        .value-neutral {
+            color: var(--neutral-color);
+            font-weight: bold;
         }
 
         .chart-container {
-            background-color: #f8f9fa;
-            border: 1px solid #e2e6ea;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
-        }
-        body.dark-mode .chart-container {
-            background-color: #4a4a4a;
-            border: 1px solid #5e5e5e;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-        .chart-container h3 {
-            text-align: center;
-            color: #343a40;
-            margin-bottom: 20px;
-        }
-        body.dark-mode .chart-container h3 {
-            color: #f8f9fa;
-        }
-        .chart-wrapper {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-around;
             gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
         }
+
         .chart {
             flex: 1;
             min-width: 300px;
-            height: 300px;
-        }
-        .dark-mode-toggle {
             text-align: center;
-            margin-bottom: 20px;
         }
-        .dark-mode-toggle button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
+
+        .chart img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .recommendation {
+            padding: 15px;
             border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s;
+            margin-top: 15px;
+            font-weight: bold;
         }
-        .dark-mode-toggle button:hover {
-            background-color: #0056b3;
-        }
-        body.dark-mode .dark-mode-toggle button {
-            background-color: #6daff7;
-        }
-        body.dark-mode .dark-mode-toggle button:hover {
-            background-color: #4a90d9;
-        }
+
+        .recommendation.buy { background-color: rgba(76, 175, 80, 0.2); color: var(--positive-color); }
+        .recommendation.hold { background-color: rgba(255, 152, 0, 0.2); color: var(--neutral-color); }
+        .recommendation.sell { background-color: rgba(244, 67, 54, 0.2); color: var(--negative-color); }
+
         @media (max-width: 768px) {
-            .summary-cards {
-                flex-direction: column;
-                align-items: center;
+            .container {
+                width: 95%;
+                padding: 15px;
             }
-            .asset-card {
+            .summary-card, .asset-card {
+                min-width: 100%;
+            }
+            .asset-card ul li {
                 flex-direction: column;
                 align-items: flex-start;
             }
-            .chart-wrapper {
-                flex-direction: column;
-                align-items: center;
-            }
-            .chart {
-                width: 100%;
+            .asset-card ul li span {
+                text-align: left;
+                margin-top: 5px;
             }
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="dark-mode-toggle">
-        <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
-    </div>
+    <header>
+        <h1>Stock Analysis Report</h1>
+    </header>
+
     <div class="container">
-        <h1>Stock Portfolio Performance</h1>
-
-        <div class="summary-cards">
-            <div class="summary-card">
-                <h3>Total Invested</h3>
-                <p>₹ 350.00</p>
-            </div>
-            <div class="summary-card">
-                <h3>Current Value</h3>
-                <p>₹ 347.22</p>
-            </div>
-            <div class="summary-card">
-                <h3>Overall Gain/Loss</h3>
-                <p class="gain-negative">₹ -2.78 (-0.79%)</p>
-            </div>
-        </div>
-
-        <h2>Your Assets</h2>
-        <div class="asset-card">
-            <h3>TATASTEEL</h3>
-            <div class="asset-details">
-                <p><strong>Asset Type:</strong> <span>Stock</span></p>
-                <p><strong>Quantity:</strong> <span>2</span></p>
-                <p><strong>Buy Price:</strong> <span>₹ 175.00</span></p>
-                <p><strong>Current Price:</strong> <span>₹ 173.61</span></p>
-                <p><strong>Invested:</strong> <span>₹ 350.00</span></p>
-                <p><strong>Current Value:</strong> <span>₹ 347.22</span></p>
-                <p><strong>Gain/Loss:</strong> <span class="gain-negative">₹ -2.78 (-0.79%)</span></p>
-            </div>
-            <div class="asset-details">
-                <p><strong>Market Cap:</strong> <span>₹ 2,166,516,669,596.00</span></p>
-                <p><strong>P/E Ratio:</strong> <span>47.64</span></p>
-                <p><strong>Dividend Yield:</strong> <span>Not Available</span></p>
-                <p><strong>Open:</strong> <span>Not Available</span></p>
-                <p><strong>High:</strong> <span>₹ 176.14</span></p>
-                <p><strong>Low:</strong> <span>₹ 173.02</span></p>
-                <p><strong>Previous Close:</strong> <span>₹ 176.42</span></p>
-            </div>
-            <div class="recommendation">
-                <p><strong>Recommendation:</strong> Hold</p>
-                <p><strong>Reasoning:</strong> The P/E ratio of 47.64 is quite high, suggesting potential overvaluation. While the stock currently shows a small loss, news sentiment is mixed with some analyst "Buy" recommendations alongside cautionary notes. Given the current situation, a 'Hold' position is advised to monitor further developments.</p>
+        <div class="section">
+            <h2>Overall Portfolio Summary</h2>
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <h3>Total Invested</h3>
+                    <p>₹350.00</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Current Value</h3>
+                    <p>₹346.24</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Overall Gain/Loss</h3>
+                    <p class="value-negative">-₹3.76 (-1.07%)</p>
+                </div>
             </div>
         </div>
 
-        <h2>Portfolio Charts</h2>
-        <div class="chart-wrapper">
+        <div class="section">
+            <h2>Asset Details</h2>
+            <div class="asset-cards">
+                <div class="asset-card">
+                    <h3>TATASTEEL</h3>
+                    <ul>
+                        <li><strong>Asset Type:</strong> <span>Stock</span></li>
+                        <li><strong>Symbol:</strong> <span>TATASTEEL</span></li>
+                        <li><strong>Quantity:</strong> <span>2</span></li>
+                        <li><strong>Buy Price:</strong> <span>₹175.00</span></li>
+                        <li><strong>Current Price:</strong> <span>₹173.12</span></li>
+                        <li><strong>Invested:</strong> <span>₹350.00</span></li>
+                        <li><strong>Current Value:</strong> <span>₹346.24</span></li>
+                        <li><strong>Gain/Loss:</strong> <span class="value-negative">-₹3.76</span></li>
+                        <li><strong>Gain/Loss (%):</strong> <span class="value-negative">-1.07%</span></li>
+                    </ul>
+                    <h4>Fundamentals</h4>
+                    <ul>
+                        <li><strong>Market Cap:</strong> <span>₹2,164,644,025,806.00</span></li>
+                        <li><strong>P/E Ratio:</strong> <span>47.67</span></li>
+                        <li><strong>Dividend Yield:</strong> <span>Not Available</span></li>
+                    </ul>
+                    <h4>Technicals</h4>
+                    <ul>
+                        <li><strong>RSI:</strong> <span>Bullish upswing (from news)</span></li>
+                        <li><strong>SMA:</strong> <span>Not Available</span></li>
+                    </ul>
+                    <h4>News & Sentiment</h4>
+                    <p><strong>Sentiment:</strong> <span class="value-positive">Mostly Positive with some Neutral/Cautionary notes</span></p>
+                    <p><strong>Reasoning:</strong> Significant positive news regarding green transition initiatives with substantial financial backing from the Dutch government, production increases, shares climbing, hitting new peaks, and bullish RSI. Brokerages and analysts show a mix of "Buy" or "Neutral" ratings with a positive outlook for the metal sector. However, there are some cautionary elements like EU cutting import quotas, an ongoing demand notice from Odisha authorities, and questions around the execution of ambitious capacity targets.</p>
+                    <div class="recommendation hold">
+                        <strong>Recommendation:</strong> Hold
+                        <p>Given the slight current loss, the somewhat high P/E ratio, but strong positive news flow, significant investment in green technology, and positive technical indicators (RSI, recent price movements), a **Hold** recommendation seems appropriate for existing investors. The long-term outlook appears positive due to decarbonization efforts and industry protections, but the current price indicates short-term volatility.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Portfolio Visualization</h2>
             <div class="chart-container">
-                <h3>Invested vs Current Value</h3>
-                <canvas id="barChart" class="chart"></canvas>
-            </div>
-            <div class="chart-container">
-                <h3>Allocation by Market Value</h3>
-                <canvas id="pieChart" class="chart"></canvas>
+                <div class="chart">
+                    <h3>Invested vs Current Value</h3>
+                    <img src="https://via.placeholder.com/400x250?text=Bar+Chart:+Invested+vs+Current+Value" alt="Bar Chart: Invested vs Current Value">
+                </div>
+                <div class="chart">
+                    <h3>Allocation by Market Value</h3>
+                    <img src="https://via.placeholder.com/400x250?text=Pie+Chart:+Allocation+by+Market+Value" alt="Pie Chart: Allocation by Market Value">
+                </div>
             </div>
         </div>
-
     </div>
-
-    <script>
-        // Dark Mode Toggle
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-        }
-
-        // Bar Chart: Invested vs Current Value
-        const barCtx = document.getElementById('barChart').getContext('2d');
-        const barChart = new Chart(barCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Invested', 'Current Value'],
-                datasets: [{
-                    label: 'Amount (INR)',
-                    data: [350, 347.22],
-                    backgroundColor: [
-                        'rgba(75, 192, 192, 0.6)',
-                        'rgba(153, 102, 255, 0.6)'
-                    ],
-                    borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: function(context) {
-                                return document.body.classList.contains('dark-mode') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-                            }
-                        },
-                        ticks: {
-                            color: function(context) {
-                                return document.body.classList.contains('dark-mode') ? '#e0e0e0' : '#333';
-                            }
-                        }
-                    },
-                    x: {
-                        grid: {
-                            color: function(context) {
-                                return document.body.classList.contains('dark-mode') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-                            }
-                        },
-                        ticks: {
-                            color: function(context) {
-                                return document.body.classList.contains('dark-mode') ? '#e0e0e0' : '#333';
-                            }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: function(context) {
-                                return document.body.classList.contains('dark-mode') ? '#e0e0e0' : '#333';
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        // Pie Chart: Allocation by market value
-        const pieCtx = document.getElementById('pieChart').getContext('2d');
-        const pieChart = new Chart(pieCtx, {
-            type: 'pie',
-            data: {
-                labels: ['TATASTEEL'],
-                datasets: [{
-                    label: 'Allocation by Market Value',
-                    data: [347.22], // Current value of TATASTEEL
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.6)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: function(context) {
-                                return document.body.classList.contains('dark-mode') ? '#e0e0e0' : '#333';
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    </script>
 </body>
 </html>
