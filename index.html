@@ -1,300 +1,400 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investment Portfolio Report</title>
+    <title>Stock Portfolio Report</title>
     <style>
-        :root {
-            --background-color: #f4f4f4;
-            --text-color: #333;
-            --card-background: #ffffff;
-            --header-background: #6200ea;
-            --header-text: #ffffff;
-            --border-color: #ddd;
-            --positive-color: #28a745;
-            --negative-color: #dc3545;
-            --neutral-color: #ffc107;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --background-color: #121212;
-                --text-color: #e0e0e0;
-                --card-background: #1e1e1e;
-                --header-background: #bb86fc;
-                --header-text: #121212;
-                --border-color: #333;
-            }
-        }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
+            background-color: #f4f7f6;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
         }
-
+        body.dark-mode {
+            background-color: #2c2c2c;
+            color: #e0e0e0;
+        }
         .container {
             max-width: 1200px;
             margin: auto;
-            background: var(--card-background);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border: 1px solid var(--border-color);
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
-
-        h1, h2, h3 {
-            color: var(--header-background);
+        body.dark-mode .container {
+            background-color: #3a3a3a;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        h1, h2 {
+            color: #007bff;
             text-align: center;
+            margin-bottom: 25px;
+            font-weight: 600;
         }
-
-        .summary, .asset-card {
-            margin-bottom: 20px;
-            padding: 15px;
+        body.dark-mode h1, body.dark-mode h2 {
+            color: #6daff7;
+        }
+        .summary-cards {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        .summary-card {
+            background-color: #e9f7fe;
+            border: 1px solid #cce5ff;
+            border-left: 5px solid #007bff;
             border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background: var(--card-background);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin: 10px;
+            flex: 1;
+            min-width: 280px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: background-color 0.3s, border-color 0.3s, box-shadow 0 0.3s;
         }
-
-        .summary h3, .asset-card h3 {
-            color: var(--text-color);
+        body.dark-mode .summary-card {
+            background-color: #4a4a4a;
+            border: 1px solid #5e5e5e;
+            border-left-color: #6daff7;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
+        .summary-card h3 {
+            margin-top: 0;
+            color: #0056b3;
+            font-size: 1.1em;
+        }
+        body.dark-mode .summary-card h3 {
+            color: #a0d4ff;
+        }
+        .summary-card p {
+            font-size: 1.6em;
+            font-weight: 700;
+            margin: 10px 0 0;
+            color: #007bff;
+        }
+        body.dark-mode .summary-card p {
+            color: #6daff7;
+        }
+        .gain-positive { color: #28a745; }
+        .gain-negative { color: #dc3545; }
 
-        .summary-item {
+        .asset-card {
+            background-color: #f8f9fa;
+            border: 1px solid #e2e6ea;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+        body.dark-mode .asset-card {
+            background-color: #4a4a4a;
+            border: 1px solid #5e5e5e;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .asset-card h3 {
+            flex-basis: 100%;
+            margin-top: 0;
+            color: #343a40;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+        body.dark-mode .asset-card h3 {
+            color: #f8f9fa;
+        }
+        .asset-details {
+            flex: 1;
+            min-width: 250px;
+        }
+        .asset-details p {
+            margin: 8px 0;
+            font-size: 0.95em;
             display: flex;
             justify-content: space-between;
-            padding: 5px 0;
-            border-bottom: 1px dashed var(--border-color);
+            align-items: center;
         }
-        .summary-item:last-child {
-            border-bottom: none;
+        .asset-details p strong {
+            color: #555;
+            font-weight: 500;
+            min-width: 120px;
         }
-
-        .asset-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
+        body.dark-mode .asset-details p strong {
+            color: #d0d0d0;
         }
-
-        .detail-item {
-            padding: 5px 0;
-            border-bottom: 1px dotted var(--border-color);
+        .asset-details p span {
+            text-align: right;
+            color: #333;
         }
-        .detail-item:last-child {
-            border-bottom: none;
+        body.dark-mode .asset-details p span {
+            color: #e0e0e0;
         }
-
-        .sentiment.positive { color: var(--positive-color); font-weight: bold; }
-        .sentiment.negative { color: var(--negative-color); font-weight: bold; }
-        .sentiment.neutral { color: var(--neutral-color); font-weight: bold; }
-
-        .recommendation.buy { color: var(--positive-color); font-weight: bold; }
-        .recommendation.hold { color: var(--neutral-color); font-weight: bold; }
-        .recommendation.sell { color: var(--negative-color); font-weight: bold; }
+        .recommendation {
+            flex-basis: 100%;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #ced4da;
+            font-style: italic;
+        }
+        body.dark-mode .recommendation {
+            border-top-color: #6c757d;
+        }
+        .recommendation strong {
+            color: #007bff;
+        }
+        body.dark-mode .recommendation strong {
+            color: #6daff7;
+        }
 
         .chart-container {
-            margin-top: 30px;
-            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #e2e6ea;
             border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background: var(--card-background);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
         }
-
-        .chart-item {
-            margin-bottom: 10px;
+        body.dark-mode .chart-container {
+            background-color: #4a4a4a;
+            border: 1px solid #5e5e5e;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
-
-        .bar-chart-bar {
-            background-color: #4CAF50;
+        .chart-container h3 {
+            text-align: center;
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+        body.dark-mode .chart-container h3 {
+            color: #f8f9fa;
+        }
+        .chart-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 20px;
+        }
+        .chart {
+            flex: 1;
+            min-width: 300px;
+            height: 300px;
+        }
+        .dark-mode-toggle {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .dark-mode-toggle button {
+            background-color: #007bff;
             color: white;
-            text-align: right;
-            padding: 4px;
-            margin: 1px 0;
-            border-radius: 3px;
-            white-space: nowrap;
-            overflow: hidden;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
         }
-
-        .bar-chart-bar.invested { background-color: #007bff; }
-        .bar-chart-bar.current-value { background-color: #28a745; }
-
-        .pie-chart-slice {
-            padding: 5px 0;
-            border-bottom: 1px dotted var(--border-color);
+        .dark-mode-toggle button:hover {
+            background-color: #0056b3;
         }
-        .pie-chart-slice:last-child {
-            border-bottom: none;
+        body.dark-mode .dark-mode-toggle button {
+            background-color: #6daff7;
         }
-
+        body.dark-mode .dark-mode-toggle button:hover {
+            background-color: #4a90d9;
+        }
         @media (max-width: 768px) {
-            .container {
-                padding: 10px;
+            .summary-cards {
+                flex-direction: column;
+                align-items: center;
             }
-            .asset-details {
-                grid-template-columns: 1fr;
+            .asset-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .chart-wrapper {
+                flex-direction: column;
+                align-items: center;
+            }
+            .chart {
+                width: 100%;
             }
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Investment Portfolio Report</h1>
-
-        <div class="summary">
-            <h2>Overall Portfolio Summary</h2>
-            <div class="summary-item">
-                <span>Total Invested:</span>
-                <span>INR 77,100.00</span>
-            </div>
-            <div class="summary-item">
-                <span>Current Value:</span>
-                <span>INR 87,635.00</span>
-            </div>
-            <div class="summary-item">
-                <span>Overall Gain/Loss:</span>
-                <span class="
-                    {% if 10535 >= 0 %}positive{% else %}negative{% endif %}
-                ">INR 10,535.00 (13.66%)</span>
-            </div>
-        </div>
-
-        <h2>Asset Breakdown</h2>
-        
-        <div class="asset-card">
-            <h3>HDFCBANK (Stock)</h3>
-            <div class="asset-details">
-                <div class="detail-item"><strong>Asset Type:</strong> Stock</div>
-                <div class="detail-item"><strong>Symbol:</strong> HDFCBANK</div>
-                <div class="detail-item"><strong>Quantity:</strong> 3</div>
-                <div class="detail-item"><strong>Buy Price:</strong> INR 2,400.00</div>
-                <div class="detail-item"><strong>Current Price:</strong> INR 982.50</div>
-                <div class="detail-item"><strong>Invested:</strong> INR 7,200.00</div>
-                <div class="detail-item"><strong>Current Value:</strong> INR 2,947.50</div>
-                <div class="detail-item"><strong>Gain/Loss:</strong> <span class="negative">INR -4,252.50 (-59.06%)</span></div>
-                <div class="detail-item"><strong>Market Cap:</strong> INR 15,095,583,596,455.00</div>
-                <div class="detail-item"><strong>P/E Ratio:</strong> 21.36</div>
-                <div class="detail-item"><strong>Dividend Yield:</strong> Not Available</div>
-                <div class="detail-item"><strong>Sentiment:</strong> <span class="negative">Negative</span> (News suggests potential issues with bonus issues and SEBI warnings)</div>
-                <div class="detail-item"><strong>Recommendation:</strong> <span class="sell">Sell</span> (Based on negative sentiment, significant loss, and ongoing regulatory scrutiny.)</div>
-            </div>
-        </div>
-        
-        <div class="asset-card">
-            <h3>TCS (Stock)</h3>
-            <div class="asset-details">
-                <div class="detail-item"><strong>Asset Type:</strong> Stock</div>
-                <div class="detail-item"><strong>Symbol:</strong> TCS</div>
-                <div class="detail-item"><strong>Quantity:</strong> 10</div>
-                <div class="detail-item"><strong>Buy Price:</strong> INR 3,000.00</div>
-                <div class="detail-item"><strong>Current Price:</strong> INR 3,037.00</div>
-                <div class="detail-item"><strong>Invested:</strong> INR 30,000.00</div>
-                <div class="detail-item"><strong>Current Value:</strong> INR 30,370.00</div>
-                <div class="detail-item"><strong>Gain/Loss:</strong> <span class="positive">INR 370.00 (1.23%)</span></div>
-                <div class="detail-item"><strong>Market Cap:</strong> INR 10,989,583,175,270.00</div>
-                <div class="detail-item"><strong>P/E Ratio:</strong> 22.16</div>
-                <div class="detail-item"><strong>Dividend Yield:</strong> Not Available</div>
-                <div class="detail-item"><strong>Sentiment:</strong> <span class="neutral">Neutral</span> (Mixed news with some positive mentions of Q2 earnings beat and AI deals, but also concerns regarding H-1B visa changes and alleged layoffs.)</div>
-                <div class="detail-item"><strong>Recommendation:</strong> <span class="hold">Hold</span> (Despite slight gains, recent news includes concerns about H-1B visa changes and layoffs, suggesting caution. Monitor for clear positive catalysts.)</div>
-            </div>
-        </div>
-        
-        <div class="asset-card">
-            <h3>BTC (Crypto)</h3>
-            <div class="asset-details">
-                <div class="detail-item"><strong>Asset Type:</strong> Crypto</div>
-                <div class="detail-item"><strong>Symbol:</strong> BTC</div>
-                <div class="detail-item"><strong>Quantity:</strong> 0.001</div>
-                <div class="detail-item"><strong>Buy Price:</strong> INR 900,000.00</div>
-                <div class="detail-item"><strong>Current Price:</strong> INR 10,782,494.28</div>
-                <div class="detail-item"><strong>Invested:</strong> INR 900.00</div>
-                <div class="detail-item"><strong>Current Value:</strong> INR 10,782.49</div>
-                <div class="detail-item"><strong>Gain/Loss:</strong> <span class="positive">INR 9,882.49 (1098.05%)</span></div>
-                <div class="detail-item"><strong>Market Cap:</strong> Not Available</div>
-                <div class="detail-item"><strong>P/E Ratio:</strong> Not Available</div>
-                <div class="detail-item"><strong>Dividend Yield:</strong> Not Available</div>
-                <div class="detail-item"><strong>Sentiment:</strong> <span class="positive">Positive</span> (News highlights record highs, ETF inflows, and adoption, with some analysts predicting further surges. However, also mentions whale selling and volatility warnings.)</div>
-                <div class="detail-item"><strong>Recommendation:</strong> <span class="buy">Buy</span> (Strong positive sentiment and significant gains. However, be mindful of the inherent volatility in the crypto market.)</div>
-            </div>
-        </div>
-        
-        <div class="asset-card">
-            <h3>SWIGGY (Stock)</h3>
-            <div class="asset-details">
-                <div class="detail-item"><strong>Asset Type:</strong> Stock</div>
-                <div class="detail-item"><strong>Symbol:</strong> SWIGGY</div>
-                <div class="detail-item"><strong>Quantity:</strong> 100</div>
-                <div class="detail-item"><strong>Buy Price:</strong> INR 390.00</div>
-                <div class="detail-item"><strong>Current Price:</strong> INR 435.35</div>
-                <div class="detail-item"><strong>Invested:</strong> INR 39,000.00</div>
-                <div class="detail-item"><strong>Current Value:</strong> INR 43,535.00</div>
-                <div class="detail-item"><strong>Gain/Loss:</strong> <span class="positive">INR 4,535.00 (11.63%)</span></div>
-                <div class="detail-item"><strong>Market Cap:</strong> INR 1,003,592,912,005.00</div>
-                <div class="detail-item"><strong>P/E Ratio:</strong> Not Available</div>
-                <div class="detail-item"><strong>Dividend Yield:</strong> Not Available</div>
-                <div class="detail-item"><strong>Sentiment:</strong> <span class="positive">Positive</span> (News regarding price target raises, strategic stake sales, and new app launches. Some concerns about platform fees and competition exist.)</div>
-                <div class="detail-item"><strong>Recommendation:</strong> <span class="buy">Buy</span> (Positive market sentiment, strategic moves to enhance business, and good returns indicate potential for further growth.)</div>
-            </div>
-        </div>
-        
-
-        <div class="chart-container">
-            <h2>Invested vs. Current Value (Bar Chart Representation)</h2>
-            <p>Each bar represents the 'Invested' (blue) and 'Current Value' (green) for each asset. The length of the bar is relative to the highest value in the portfolio.</p>
-            
-            <div class="chart-item">
-                <strong>HDFCBANK:</strong>
-                <div class="bar-chart-bar invested" style="width: 16.29%;">INR 7,200.00</div>
-                <div class="bar-chart-bar current-value" style="width: 6.70%;">INR 2,947.50</div>
-            </div>
-            
-            <div class="chart-item">
-                <strong>TCS:</strong>
-                <div class="bar-chart-bar invested" style="width: 68.39%;">INR 30,000.00</div>
-                <div class="bar-chart-bar current-value" style="width: 69.17%;">INR 30,370.00</div>
-            </div>
-            
-            <div class="chart-item">
-                <strong>BTC:</strong>
-                <div class="bar-chart-bar invested" style="width: 2.05%;">INR 900.00</div>
-                <div class="bar-chart-bar current-value" style="width: 24.58%;">INR 10,782.49</div>
-            </div>
-            
-            <div class="chart-item">
-                <strong>SWIGGY:</strong>
-                <div class="bar-chart-bar invested" style="width: 88.88%;">INR 39,000.00</div>
-                <div class="bar-chart-bar current-value" style="width: 99.27%;">INR 43,535.00</div>
-            </div>
-            
-        </div>
-
-        <div class="chart-container">
-            <h2>Allocation by Market Value (Pie Chart Representation)</h2>
-            <p>The percentages represent each asset's contribution to the total current market value of your portfolio.</p>
-            
-            <div class="pie-chart-slice">
-                <strong>HDFCBANK:</strong> 3.36%
-            </div>
-            
-            <div class="pie-chart-slice">
-                <strong>TCS:</strong> 34.66%
-            </div>
-            
-            <div class="pie-chart-slice">
-                <strong>BTC:</strong> 12.30%
-            </div>
-            
-            <div class="pie-chart-slice">
-                <strong>SWIGGY:</strong> 49.68%
-            </div>
-            
-        </div>
+    <div class="dark-mode-toggle">
+        <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
     </div>
+    <div class="container">
+        <h1>Stock Portfolio Performance</h1>
+
+        <div class="summary-cards">
+            <div class="summary-card">
+                <h3>Total Invested</h3>
+                <p>₹ 350.00</p>
+            </div>
+            <div class="summary-card">
+                <h3>Current Value</h3>
+                <p>₹ 347.22</p>
+            </div>
+            <div class="summary-card">
+                <h3>Overall Gain/Loss</h3>
+                <p class="gain-negative">₹ -2.78 (-0.79%)</p>
+            </div>
+        </div>
+
+        <h2>Your Assets</h2>
+        <div class="asset-card">
+            <h3>TATASTEEL</h3>
+            <div class="asset-details">
+                <p><strong>Asset Type:</strong> <span>Stock</span></p>
+                <p><strong>Quantity:</strong> <span>2</span></p>
+                <p><strong>Buy Price:</strong> <span>₹ 175.00</span></p>
+                <p><strong>Current Price:</strong> <span>₹ 173.61</span></p>
+                <p><strong>Invested:</strong> <span>₹ 350.00</span></p>
+                <p><strong>Current Value:</strong> <span>₹ 347.22</span></p>
+                <p><strong>Gain/Loss:</strong> <span class="gain-negative">₹ -2.78 (-0.79%)</span></p>
+            </div>
+            <div class="asset-details">
+                <p><strong>Market Cap:</strong> <span>₹ 2,166,516,669,596.00</span></p>
+                <p><strong>P/E Ratio:</strong> <span>47.64</span></p>
+                <p><strong>Dividend Yield:</strong> <span>Not Available</span></p>
+                <p><strong>Open:</strong> <span>Not Available</span></p>
+                <p><strong>High:</strong> <span>₹ 176.14</span></p>
+                <p><strong>Low:</strong> <span>₹ 173.02</span></p>
+                <p><strong>Previous Close:</strong> <span>₹ 176.42</span></p>
+            </div>
+            <div class="recommendation">
+                <p><strong>Recommendation:</strong> Hold</p>
+                <p><strong>Reasoning:</strong> The P/E ratio of 47.64 is quite high, suggesting potential overvaluation. While the stock currently shows a small loss, news sentiment is mixed with some analyst "Buy" recommendations alongside cautionary notes. Given the current situation, a 'Hold' position is advised to monitor further developments.</p>
+            </div>
+        </div>
+
+        <h2>Portfolio Charts</h2>
+        <div class="chart-wrapper">
+            <div class="chart-container">
+                <h3>Invested vs Current Value</h3>
+                <canvas id="barChart" class="chart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Allocation by Market Value</h3>
+                <canvas id="pieChart" class="chart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // Bar Chart: Invested vs Current Value
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        const barChart = new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Invested', 'Current Value'],
+                datasets: [{
+                    label: 'Amount (INR)',
+                    data: [350, 347.22],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: function(context) {
+                                return document.body.classList.contains('dark-mode') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+                            }
+                        },
+                        ticks: {
+                            color: function(context) {
+                                return document.body.classList.contains('dark-mode') ? '#e0e0e0' : '#333';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: function(context) {
+                                return document.body.classList.contains('dark-mode') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+                            }
+                        },
+                        ticks: {
+                            color: function(context) {
+                                return document.body.classList.contains('dark-mode') ? '#e0e0e0' : '#333';
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: function(context) {
+                                return document.body.classList.contains('dark-mode') ? '#e0e0e0' : '#333';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Pie Chart: Allocation by market value
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        const pieChart = new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: ['TATASTEEL'],
+                datasets: [{
+                    label: 'Allocation by Market Value',
+                    data: [347.22], // Current value of TATASTEEL
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: function(context) {
+                                return document.body.classList.contains('dark-mode') ? '#e0e0e0' : '#333';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
