@@ -3,188 +3,368 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investment Portfolio Report</title>
+    <title>Portfolio Entry Form</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
-            background-color: #f4f4f4;
-            color: #333;
-            transition: background-color 0.3s, color 0.3s;
         }
-        body.dark-mode {
-            background-color: #121212;
-            color: #e0e0e0;
-        }
+
         .container {
-            max-width: 1200px;
-            margin: auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s, box-shadow 0.3s;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
         }
-        body.dark-mode .container {
-            background-color: #1e1e1e;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
         }
-        h1, h2 {
-            color: #0288D1;
-            text-align: center;
-            margin-bottom: 20px;
-            transition: color 0.3s;
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
         }
-        body.dark-mode h1, body.dark-mode h2 {
-            color: #64B5F6;
-        }
-        .summary-card, .asset-card {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
-        }
-        body.dark-mode .summary-card, body.dark-mode .asset-card {
-            background-color: #2c2c2c;
-            border-color: #444;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        .summary-card p, .asset-card p {
-            margin: 5px 0;
-        }
-        .summary-card strong, .asset-card strong {
-            color: #0288D1;
-            transition: color 0.3s;
-        }
-        body.dark-mode .summary-card strong, body.dark-mode .asset-card strong {
-            color: #64B5F6;
-        }
-        .gain {
-            color: #4CAF50;
-        }
-        .loss {
-            color: #F44336;
-        }
-        .neutral {
-            color: #FFC107;
-        }
-        .chart-container {
-            text-align: center;
-            margin-top: 30px;
+
+        .form-group {
             margin-bottom: 20px;
         }
-        .chart-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s;
-        }
-        body.dark-mode .chart-container img {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-        }
-        .toggle-button {
+
+        label {
             display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background-color: #0288D1;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .company-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .company-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .company-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .remove-btn {
+            background: #dc3545;
             color: white;
             border: none;
-            border-radius: 5px;
+            padding: 8px 16px;
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .remove-btn:hover {
+            background: #c82333;
+        }
+
+        .add-company-btn {
+            background: #28a745;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background 0.2s;
+        }
+
+        .add-company-btn:hover {
+            background: #218838;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
             font-size: 16px;
-            transition: background-color 0.3s;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .toggle-button:hover {
-            background-color: #0277BD;
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
         }
-        body.dark-mode .toggle-button {
-            background-color: #64B5F6;
+
+        .submit-btn:active {
+            transform: translateY(0);
         }
-        body.dark-mode .toggle-button:hover {
-            background-color: #42A5F5;
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
-        .asset-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+            border: 1px solid;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        @media (max-width: 600px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 24px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .company-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Investment Portfolio Report</h1>
+        <h1>📈 Portfolio Entry</h1>
+        <p class="subtitle">Add your stock investment details</p>
 
-        <button class="toggle-button" onclick="toggleDarkMode()">Toggle Dark Mode</button>
-
-        <div class="summary-card">
-            <h2>Overall Portfolio Summary</h2>
-            <p><strong>Total Invested:</strong> INR 18,350.00</p>
-            <p><strong>Current Value:</strong> INR 18,520.30</p>
-            <p><strong>Overall Gain/Loss:</strong> <span class="gain">INR 170.30</span></p>
-            <p><strong>Overall Gain/Loss %:</strong> <span class="gain">0.93%</span></p>
-        </div>
-
-        <div class="chart-container">
-            <h2>Investment Performance</h2>
-            <img src="https://quickchart.io/chart?c={type:'bar',data:{labels:['Invested','Current%20Value'],datasets:[{label:'Amount%20(INR)',data:[18350,18520.30],backgroundColor:['%234CAF50','%230288D1']}]},options:{plugins:{legend:{display:true},title:{display:true,text:'Investment%20Performance'}}}}" alt="Investment Performance Bar Chart">
-        </div>
-
-        <div class="chart-container">
-            <h2>Allocation by Market Value</h2>
-            <img src="https://quickchart.io/chart?c={type:'pie',data:{labels:['TATASTEEL','TCS'],datasets:[{label:'Market%20Value%20(INR)',data:[347.5,18172.80],backgroundColor:['%23FF6384','%2336A2EB']}]},options:{plugins:{legend:{display:true},title:{display:true,text:'Allocation%20by%20Market%20Value'}}}}" alt="Allocation by Market Value Pie Chart">
-        </div>
-
-        <h2>Asset Details</h2>
-        <div class="asset-grid">
-            <div class="asset-card">
-                <h3>TATASTEEL</h3>
-                <p><strong>Asset Type:</strong> Stock</p>
-                <p><strong>Quantity:</strong> 2</p>
-                <p><strong>Buy Price:</strong> INR 175.00</p>
-                <p><strong>Current Price:</strong> INR 173.75</p>
-                <p><strong>Invested:</strong> INR 350.00</p>
-                <p><strong>Current Value:</strong> INR 347.50</p>
-                <p><strong>Gain/Loss:</strong> <span class="loss">INR -2.50</span></p>
-                <p><strong>Gain/Loss %:</strong> <span class="loss">-0.71%</span></p>
-                <p><strong>Market Cap:</strong> INR 2,169,013,337,500.00</p>
-                <p><strong>P/E Ratio:</strong> 47.70</p>
-                <p><strong>Dividend Yield:</strong> Not Available</p>
-                <p><strong>RSI:</strong> Not Available</p>
-                <p><strong>SMA:</strong> Not Available</p>
-                <p><strong>Sentiment:</strong> <span class="neutral">Neutral with slight positive bias</span> - Short-term bullish signals mixed with long-term trade policy concerns.</p>
-                <p><strong>Suggestion:</strong> Hold</p>
+        <form id="portfolioForm">
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" required placeholder="your.email@example.com">
             </div>
 
-            <div class="asset-card">
-                <h3>TCS</h3>
-                <p><strong>Asset Type:</strong> Stock</p>
-                <p><strong>Quantity:</strong> 6</p>
-                <p><strong>Buy Price:</strong> INR 3,000.00</p>
-                <p><strong>Current Price:</strong> INR 3,028.80</p>
-                <p><strong>Invested:</strong> INR 18,000.00</p>
-                <p><strong>Current Value:</strong> INR 18,172.80</p>
-                <p><strong>Gain/Loss:</strong> <span class="gain">INR 172.80</span></p>
-                <p><strong>Gain/Loss %:</strong> <span class="gain">0.96%</span></p>
-                <p><strong>Market Cap:</strong> INR 10,958,829,418,770.00</p>
-                <p><strong>P/E Ratio:</strong> 22.24</p>
-                <p><strong>Dividend Yield:</strong> Not Available</p>
-                <p><strong>RSI:</strong> Not Available</p>
-                <p><strong>SMA:</strong> Not Available</p>
-                <p><strong>Sentiment:</strong> <span class="neutral">Neutral/Negative</span> - Positive contract wins and earnings are overshadowed by US H-1B visa policy changes and internal layoff controversies.</p>
-                <p><strong>Suggestion:</strong> Hold</p>
-            </div>
-        </div>
+            <div id="companiesContainer"></div>
+
+            <button type="button" class="add-company-btn" onclick="addCompany()">+ Add Company</button>
+
+            <button type="submit" class="submit-btn" id="submitBtn">Submit Portfolio</button>
+
+            <div class="message success-message" id="successMessage"></div>
+            <div class="message error-message" id="errorMessage"></div>
+        </form>
     </div>
 
     <script>
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
+        let companyCount = 0;
+
+        function addCompany() {
+            companyCount++;
+            const container = document.getElementById('companiesContainer');
+            
+            const companyDiv = document.createElement('div');
+            companyDiv.className = 'company-section';
+            companyDiv.id = `company-${companyCount}`;
+            
+            companyDiv.innerHTML = `
+                <div class="company-header">
+                    <span class="company-title">Company ${companyCount}</span>
+                    <button type="button" class="remove-btn" onclick="removeCompany(${companyCount})">Remove</button>
+                </div>
+                
+                <div class="form-group">
+                    <label>Company Name *</label>
+                    <input type="text" name="company_${companyCount}" required placeholder="e.g., Apple Inc.">
+                </div>
+
+                <div class="form-group">
+                    <label>Ticker Symbol</label>
+                    <input type="text" name="ticker_${companyCount}" placeholder="e.g., AAPL" style="text-transform: uppercase;">
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label>Quantity *</label>
+                        <input type="number" name="quantity_${companyCount}" required min="1" step="1" placeholder="e.g., 10">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Buy Price *</label>
+                        <input type="number" name="buyPrice_${companyCount}" required step="0.01" min="0" placeholder="e.g., 150.50">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Purchase Date *</label>
+                    <input type="date" name="purchaseDate_${companyCount}" required>
+                </div>
+            `;
+            
+            container.appendChild(companyDiv);
+
+            // Auto-uppercase ticker
+            const tickerInput = companyDiv.querySelector(`input[name="ticker_${companyCount}"]`);
+            tickerInput.addEventListener('input', function(e) {
+                e.target.value = e.target.value.toUpperCase();
+            });
         }
+
+        function removeCompany(id) {
+            const companyDiv = document.getElementById(`company-${id}`);
+            if (companyDiv) {
+                companyDiv.remove();
+            }
+        }
+
+        // Add first company on load
+        window.addEventListener('DOMContentLoaded', function() {
+            addCompany();
+        });
+
+        document.getElementById('portfolioForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+
+            // Hide messages
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+
+            // Get email
+            const email = document.getElementById('email').value;
+
+            // Get all companies
+            const companies = [];
+            const companySections = document.querySelectorAll('.company-section');
+
+            companySections.forEach(section => {
+                const id = section.id.split('-')[1];
+                const company = {
+                    company_name: section.querySelector(`input[name="company_${id}"]`).value,
+                    ticker: section.querySelector(`input[name="ticker_${id}"]`).value.toUpperCase() || null,
+                    quantity: parseInt(section.querySelector(`input[name="quantity_${id}"]`).value),
+                    buy_price: parseFloat(section.querySelector(`input[name="buyPrice_${id}"]`).value),
+                    purchase_date: section.querySelector(`input[name="purchaseDate_${id}"]`).value,
+                    total_investment: (parseInt(section.querySelector(`input[name="quantity_${id}"]`).value) * 
+                                     parseFloat(section.querySelector(`input[name="buyPrice_${id}"]`).value)).toFixed(2)
+                };
+                companies.push(company);
+            });
+
+            // Prepare JSON data
+            const portfolioData = {
+                email: email,
+                companies: companies,
+                submission_date: new Date().toISOString()
+            };
+
+            try {
+                // Send to webhook
+                const response = await fetch('https://local.codestore.co/n8n/webhook/b17ebcb0-3f80-48e7-97b7-d9cfaec095cc', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(portfolioData)
+                });
+
+                if (response.ok) {
+                    successMsg.textContent = '✓ Portfolio submitted successfully!';
+                    successMsg.style.display = 'block';
+                    
+                    // Reset form
+                    this.reset();
+                    document.getElementById('companiesContainer').innerHTML = '';
+                    companyCount = 0;
+                    addCompany();
+
+                    // Hide success message after 5 seconds
+                    setTimeout(() => {
+                        successMsg.style.display = 'none';
+                    }, 5000);
+                } else {
+                    throw new Error('Failed to submit portfolio');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorMsg.textContent = '✗ Error submitting portfolio. Please try again.';
+                errorMsg.style.display = 'block';
+            } finally {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Portfolio';
+            }
+        });
     </script>
 </body>
 </html>
