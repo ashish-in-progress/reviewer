@@ -220,6 +220,17 @@
     </div>
 
     <script>
+        // Generate a unique password for portfolio access
+        function generatePassword() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+            const length = 12;
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return password;
+        }
+
         let companyCount = 0;
 
         function addCompany() {
@@ -321,9 +332,13 @@
                 companies.push(company);
             });
 
+            // Generate a unique password/token for this portfolio
+            const portfolioPassword = generatePassword();
+
             // Prepare JSON data
             const portfolioData = {
                 email: email,
+                portfolio_password: portfolioPassword,
                 companies: companies,
                 submission_date: new Date().toISOString()
             };
@@ -341,11 +356,12 @@
 
                 // With no-cors mode, we can't check response status
                 // Assume success if no error thrown
-                successMsg.textContent = '✓ Portfolio submitted successfully!';
+                successMsg.innerHTML = `✓ Portfolio submitted successfully!<br><strong>Your Portfolio Password: ${portfolioPassword}</strong><br><small>Save this password to view your portfolio later</small>`;
                 successMsg.style.display = 'block';
                 
                 // Log data for debugging
                 console.log('Submitted data:', portfolioData);
+                console.log('Portfolio Password:', portfolioPassword);
                 
                 // Reset form
                 this.reset();
