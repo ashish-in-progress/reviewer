@@ -1,1077 +1,1057 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crack Any Role — Study Roadmap</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Glasspad — Premium Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --bg: #0a0a0f;
-    --surface: #111118;
-    --border: #1e1e2e;
-    --mern: #00d4aa;
-    --cpp: #ff6b35;
-    --gold: #ffd700;
-    --text: #e8e8f0;
-    --muted: #6b6b8a;
-    --card: #13131f;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    overflow-x: hidden;
-  }
-
-  /* NOISE OVERLAY */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.4;
-  }
-
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 4rem 2rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: -200px; left: -200px;
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(0,212,170,0.08) 0%, transparent 70%);
-    animation: pulse 6s ease-in-out infinite;
-  }
-
-  .hero::after {
-    content: '';
-    position: absolute;
-    bottom: -200px; right: -200px;
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(255,107,53,0.08) 0%, transparent 70%);
-    animation: pulse 6s ease-in-out infinite reverse;
-  }
-
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.1); opacity: 0.7; }
-  }
-
-  .badge {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    color: var(--muted);
-    border: 1px solid var(--border);
-    padding: 0.4rem 1rem;
-    border-radius: 100px;
-    margin-bottom: 2rem;
-    animation: fadeIn 0.8s ease forwards;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .hero h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(4rem, 12vw, 10rem);
-    line-height: 0.9;
-    letter-spacing: 0.02em;
-    animation: fadeIn 0.8s ease 0.1s both;
-  }
-
-  .hero h1 span.g1 { color: var(--mern); }
-  .hero h1 span.g2 { color: var(--cpp); }
-
-  .hero-sub {
-    font-size: 1.1rem;
-    color: var(--muted);
-    margin-top: 1.5rem;
-    max-width: 500px;
-    line-height: 1.6;
-    animation: fadeIn 0.8s ease 0.2s both;
-  }
-
-  .hero-stats {
-    display: flex;
-    gap: 3rem;
-    margin-top: 3rem;
-    animation: fadeIn 0.8s ease 0.3s both;
-  }
-
-  .stat {
-    text-align: center;
-  }
-
-  .stat-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.5rem;
-    line-height: 1;
-  }
-
-  .stat-num.mern-col { color: var(--mern); }
-  .stat-num.cpp-col { color: var(--cpp); }
-
-  .stat-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    color: var(--muted);
-    margin-top: 0.3rem;
-  }
-
-  .scroll-hint {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    color: var(--muted);
-    animation: bounce 2s ease-in-out infinite;
-  }
-
-  @keyframes bounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(-8px); }
-  }
-
-  /* SECTION */
-  section {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 5rem 2rem;
-  }
-
-  .section-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.25em;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-  }
-
-  .section-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    line-height: 1;
-    margin-bottom: 3rem;
-  }
-
-  /* COMPARISON CARDS */
-  .compare-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin-bottom: 4rem;
-  }
-
-  @media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
-
-  .compare-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 2.5rem;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.3s ease, border-color 0.3s ease;
-  }
-
-  .compare-card:hover {
-    transform: translateY(-4px);
-  }
-
-  .compare-card.mern-card { border-top: 3px solid var(--mern); }
-  .compare-card.mern-card:hover { border-color: var(--mern); }
-  .compare-card.cpp-card { border-top: 3px solid var(--cpp); }
-  .compare-card.cpp-card:hover { border-color: var(--cpp); }
-
-  .compare-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 100px;
-    opacity: 0.05;
-    pointer-events: none;
-  }
-
-  .mern-card::before { background: linear-gradient(180deg, var(--mern), transparent); }
-  .cpp-card::before { background: linear-gradient(180deg, var(--cpp), transparent); }
-
-  .card-tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    padding: 0.3rem 0.8rem;
-    border-radius: 100px;
-    margin-bottom: 1.2rem;
-    display: inline-block;
-  }
-
-  .mern-tag { background: rgba(0,212,170,0.12); color: var(--mern); }
-  .cpp-tag { background: rgba(255,107,53,0.12); color: var(--cpp); }
-
-  .card-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .card-desc {
-    color: var(--muted);
-    font-size: 0.9rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-  }
-
-  .card-pros {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .card-pros li {
-    font-size: 0.85rem;
-    color: #b0b0c8;
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-    line-height: 1.4;
-  }
-
-  .card-pros li::before {
-    content: '→';
-    flex-shrink: 0;
-    margin-top: 0.05rem;
-  }
-
-  .mern-card .card-pros li::before { color: var(--mern); }
-  .cpp-card .card-pros li::before { color: var(--cpp); }
-
-  .recommended-badge {
-    position: absolute;
-    top: 1.2rem; right: 1.2rem;
-    background: var(--gold);
-    color: #000;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    padding: 0.25rem 0.6rem;
-    border-radius: 100px;
-  }
-
-  /* VERDICT */
-  .verdict-box {
-    background: linear-gradient(135deg, rgba(0,212,170,0.05), rgba(255,107,53,0.05));
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 2.5rem;
-    margin-bottom: 5rem;
-  }
-
-  .verdict-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-    color: var(--gold);
-  }
-
-  .verdict-text {
-    color: #b0b0c8;
-    font-size: 0.95rem;
-    line-height: 1.7;
-  }
-
-  .verdict-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-  }
-
-  @media (max-width: 768px) { .verdict-grid { grid-template-columns: 1fr; } }
-
-  .verdict-item {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.5rem;
-  }
-
-  .verdict-item-title {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    margin-bottom: 0.5rem;
-  }
-
-  .mern-col { color: var(--mern); }
-  .cpp-col { color: var(--cpp); }
-
-  .verdict-item p {
-    font-size: 0.85rem;
-    color: var(--muted);
-    line-height: 1.5;
-  }
-
-  /* WEEK TIMELINE */
-  .timeline-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-
-  .toggle-btn {
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    padding: 0.5rem 1.2rem;
-    border-radius: 100px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .toggle-btn.active-mern {
-    background: rgba(0,212,170,0.1);
-    border-color: var(--mern);
-    color: var(--mern);
-  }
-
-  .toggle-btn.active-cpp {
-    background: rgba(255,107,53,0.1);
-    border-color: var(--cpp);
-    color: var(--cpp);
-  }
-
-  .weeks-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .week-group {
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: border-color 0.2s ease;
-  }
-
-  .week-group:hover { border-color: #2e2e4e; }
-
-  .week-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.5rem;
-    background: var(--card);
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .week-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
-    min-width: 4rem;
-  }
-
-  .week-theme {
-    font-size: 0.9rem;
-    color: #b0b0c8;
-    flex: 1;
-  }
-
-  .week-days-count {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-  }
-
-  .week-chevron {
-    color: var(--muted);
-    transition: transform 0.2s ease;
-    font-size: 0.8rem;
-  }
-
-  .week-group.open .week-chevron { transform: rotate(180deg); }
-
-  .week-body {
-    display: none;
-    border-top: 1px solid var(--border);
-  }
-
-  .week-group.open .week-body { display: block; }
-
-  .day-row {
-    display: grid;
-    grid-template-columns: 48px 120px 1fr 1fr;
-    border-bottom: 1px solid var(--border);
-    transition: background 0.15s ease;
-  }
-
-  .day-row:last-child { border-bottom: none; }
-  .day-row:hover { background: rgba(255,255,255,0.02); }
-
-  @media (max-width: 700px) {
-    .day-row { grid-template-columns: 48px 1fr; }
-    .day-mern, .day-cpp { grid-column: 2; border-right: none; }
-    .day-label { grid-column: 2; border-right: none; font-size: 0.6rem; }
-  }
-
-  .day-label {
-    padding: 1rem 1.5rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    border-right: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-  }
-
-  .day-mern, .day-cpp {
-    padding: 1rem 1.5rem;
-    font-size: 0.82rem;
-    line-height: 1.5;
-    border-right: 1px solid var(--border);
-  }
-
-  .day-cpp { border-right: none; }
-
-  .col-header {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
-    margin-bottom: 0.3rem;
-  }
-
-  .mern-label { color: var(--mern); }
-  .cpp-label { color: var(--cpp); }
-
-  .day-topic { color: #c8c8e0; }
-
-  /* PHASE TABS */
-  .phases {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    margin-bottom: 2rem;
-  }
-
-  .phase-btn {
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    padding: 0.4rem 1rem;
-    border-radius: 100px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .phase-btn:hover, .phase-btn.active {
-    background: rgba(255,215,0,0.1);
-    border-color: var(--gold);
-    color: var(--gold);
-  }
-
-  /* PROGRESS BAR */
-  .progress-bar-wrap {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--border);
-    z-index: 1000;
-  }
-  .progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--mern), var(--cpp));
-    transition: width 0.4s ease;
-  }
-
-  .progress-widget {
-    position: fixed;
-    top: 1.2rem; right: 1.5rem;
-    z-index: 1001;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 0.6rem 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    backdrop-filter: blur(10px);
-  }
-
-  .progress-pct {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
-    line-height: 1;
-    background: linear-gradient(135deg, var(--mern), var(--cpp));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .progress-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    line-height: 1.4;
-  }
-
-  .reset-btn {
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 0.1em;
-    padding: 0.25rem 0.5rem;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  .reset-btn:hover { border-color: #ff4444; color: #ff4444; }
-
-  /* CHECKBOXES */
-  .day-row {
-    position: relative;
-  }
-
-  .day-check {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 1rem;
-    border-right: 1px solid var(--border);
-  }
-
-  .check-input {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 18px; height: 18px;
-    border: 2px solid var(--border);
-    border-radius: 5px;
-    cursor: pointer;
-    position: relative;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-  }
-
-  .check-input:hover {
-    border-color: var(--mern);
-  }
-
-  .check-input:checked {
-    background: var(--mern);
-    border-color: var(--mern);
-  }
-
-  .check-input:checked::after {
-    content: '✓';
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    color: #000;
-    font-size: 11px;
-    font-weight: 900;
-    line-height: 1;
-  }
-
-  .day-row.completed .day-label,
-  .day-row.completed .day-topic {
-    opacity: 0.4;
-    text-decoration: line-through;
-    text-decoration-color: var(--mern);
-  }
-
-  .day-row.completed {
-    background: rgba(0,212,170,0.03) !important;
-  }
-
-  /* WEEK PROGRESS MINI */
-  .week-progress-mini {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--muted);
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-
-  .mini-dots {
-    display: flex;
-    gap: 2px;
-  }
-
-  .mini-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--border);
-    transition: background 0.2s;
-  }
-
-  .mini-dot.done { background: var(--mern); }
-
-  /* FOOTER */
-  footer {
-    border-top: 1px solid var(--border);
-    text-align: center;
-    padding: 3rem 2rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-  }
-
-  /* DIVIDER */
-  .divider {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 0 2rem;
-  }
-
-  /* GLOW accent lines */
-  .accent-line {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--mern), transparent);
-    margin: 0 auto 5rem;
-    max-width: 600px;
-    opacity: 0.3;
-  }
-
-  .accent-line.cpp-line {
-    background: linear-gradient(90deg, transparent, var(--cpp), transparent);
-  }
+/* ── Reset & Base ───────────────────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --accent:#8b5cf6;
+  --accent-glow:rgba(139,92,246,0.35);
+  --accent-soft:rgba(139,92,246,0.15);
+  --bg:#060812;
+  --glass-1:rgba(255,255,255,0.04);
+  --glass-2:rgba(255,255,255,0.07);
+  --glass-3:rgba(255,255,255,0.11);
+  --border:rgba(255,255,255,0.08);
+  --border-hover:rgba(255,255,255,0.14);
+  --text:#e2e8f0;
+  --text-dim:rgba(148,163,184,0.65);
+  --text-muted:rgba(148,163,184,0.35);
+  --danger:rgba(244,63,94,0.8);
+  --danger-bg:rgba(244,63,94,0.12);
+}
+html,body{height:100%;overflow:hidden;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+}
+
+/* ── Scrollbar ──────────────────────────────────────── */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px;}
+
+/* ── Aurora BG ──────────────────────────────────────── */
+#aurora{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.blob{position:absolute;border-radius:50%;}
+#b1{width:700px;height:700px;background:radial-gradient(circle,var(--accent-glow) 0%,transparent 70%);top:-20%;left:-10%;animation:aurora 12s ease-in-out infinite;}
+#b2{width:500px;height:500px;background:radial-gradient(circle,rgba(99,102,241,0.2) 0%,transparent 70%);bottom:-15%;right:5%;animation:aurora 16s ease-in-out infinite reverse;}
+#b3{width:400px;height:400px;background:radial-gradient(circle,rgba(236,72,153,0.1) 0%,transparent 70%);top:40%;right:30%;animation:aurora 20s ease-in-out infinite 4s;}
+#grid-overlay{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.018) 1px,transparent 1px);background-size:40px 40px;}
+@keyframes aurora{0%,100%{opacity:.6;transform:scale(1) rotate(0deg);}50%{opacity:.9;transform:scale(1.15) rotate(8deg);}}
+
+/* ── Layout ─────────────────────────────────────────── */
+#app{position:relative;z-index:1;display:flex;flex-direction:column;height:100vh;}
+
+/* ── Topbar ─────────────────────────────────────────── */
+#topbar{
+  display:flex;align-items:center;gap:12px;padding:0 18px;height:58px;flex-shrink:0;
+  background:rgba(255,255,255,0.04);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+}
+.logo{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:20px;letter-spacing:-0.5px;
+  background:linear-gradient(135deg,var(--accent),#a78bfa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  user-select:none;white-space:nowrap;
+}
+#search-wrap{flex:1;max-width:400px;margin:0 auto;position:relative;}
+#search{
+  width:100%;padding:8px 36px 8px 34px;border-radius:12px;
+  background:rgba(255,255,255,0.06);backdrop-filter:blur(20px);
+  border:1px solid var(--border);color:var(--text);font-size:13px;
+  font-family:'DM Sans',sans-serif;transition:border-color .2s;outline:none;
+}
+#search:focus{border-color:var(--accent);}
+#search::placeholder{color:rgba(148,163,184,0.4);}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:rgba(148,163,184,0.45);font-size:15px;pointer-events:none;}
+#search-clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(148,163,184,0.5);cursor:pointer;font-size:14px;display:none;}
+.accent-row{display:flex;gap:7px;align-items:center;}
+.adot{width:14px;height:14px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .2s,box-shadow .2s;}
+.adot:hover{transform:scale(1.25);}
+.adot.active{box-shadow:0 0 0 2px #060812,0 0 0 4px var(--accent);}
+.divider-v{width:1px;height:22px;background:var(--border);}
+.view-toggle{display:flex;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;padding:3px;gap:2px;}
+.vbtn{background:none;border:none;cursor:pointer;padding:4px 10px;border-radius:8px;font-size:16px;color:rgba(148,163,184,0.5);transition:all .15s;}
+.vbtn.active{background:var(--accent-soft);color:var(--accent);}
+.top-btn{display:flex;align-items:center;gap:5px;padding:7px 12px;border-radius:9px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text-dim);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;}
+.top-btn:hover{background:rgba(255,255,255,0.09);border-color:var(--border-hover);}
+#new-note-btn{
+  background:linear-gradient(135deg,var(--accent),#a78bfa);color:#fff;border:none;
+  border-radius:11px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;
+  font-family:'DM Sans',sans-serif;box-shadow:0 4px 18px var(--accent-glow);
+  transition:transform .15s,box-shadow .15s;white-space:nowrap;
+}
+#new-note-btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px var(--accent-glow);}
+#menu-btn{background:none;border:none;color:rgba(148,163,184,0.6);font-size:19px;cursor:pointer;line-height:1;padding:4px;}
+
+/* ── Main ───────────────────────────────────────────── */
+#main{display:flex;flex:1;overflow:hidden;}
+
+/* ── Sidebar ────────────────────────────────────────── */
+#sidebar{
+  width:218px;flex-shrink:0;
+  background:rgba(255,255,255,0.03);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;gap:2px;padding:14px 10px;
+  overflow-y:auto;transition:width .2s,opacity .2s;
+}
+#sidebar.hidden{width:0;opacity:0;padding:0;overflow:hidden;}
+.sb-section{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;padding:8px 10px 4px;}
+.sb-item{
+  display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;
+  cursor:pointer;font-size:13px;font-weight:500;color:rgba(148,163,184,0.75);
+  transition:background .15s,color .15s;user-select:none;
+}
+.sb-item:hover{background:rgba(255,255,255,0.06);}
+.sb-item.active{background:var(--accent-soft);color:var(--accent);}
+.sb-badge{margin-left:auto;font-size:10px;background:rgba(255,255,255,0.07);color:var(--text-muted);padding:1px 7px;border-radius:10px;}
+.sb-divider{height:1px;background:var(--border);margin:8px 0;}
+.streak-box{
+  margin-top:auto;padding:12px;border-radius:14px;
+  background:var(--accent-soft);border:1px solid rgba(139,92,246,0.25);
+  text-align:center;
+}
+.streak-num{font-family:'Syne',sans-serif;font-weight:700;font-size:24px;color:var(--accent);}
+.streak-label{font-size:11px;color:rgba(148,163,184,0.5);}
+
+/* ── Note List ──────────────────────────────────────── */
+#note-list-wrap{
+  overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;
+  flex-shrink:0;transition:width .2s;
+}
+#note-list-wrap.full{flex:1;}
+#note-list-wrap.split{width:320px;border-right:1px solid var(--border);}
+#note-grid{display:flex;flex-direction:column;gap:9px;}
+#note-grid.grid-view{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;}
+.note-card{
+  border-radius:14px;padding:14px;cursor:pointer;position:relative;overflow:hidden;
+  background:rgba(255,255,255,0.04);border:1px solid var(--border);
+  transition:transform .18s cubic-bezier(.34,1.56,.64,1),box-shadow .18s,border-color .18s;
+  animation:fadeUp .3s ease both;
+}
+.note-card:hover{transform:translateY(-2px) scale(1.01);box-shadow:0 8px 28px rgba(0,0,0,0.3);}
+.note-card.active{background:rgba(255,255,255,0.08);border-color:var(--accent);box-shadow:0 0 0 1px var(--accent-soft),0 8px 30px rgba(0,0,0,0.35);}
+.card-topbar-line{position:absolute;top:0;left:0;right:0;height:2.5px;}
+.card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:13.5px;color:rgba(226,232,240,0.9);margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:36px;}
+.card-preview{font-size:12px;color:rgba(148,163,184,0.5);line-height:1.65;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:8px;}
+.card-footer{display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.card-date{font-size:10px;color:var(--text-muted);}
+.card-tags{display:flex;gap:4px;flex-wrap:nowrap;overflow:hidden;}
+.card-tag{font-size:9px;padding:2px 7px;border-radius:8px;background:var(--accent-soft);color:var(--accent);border:1px solid rgba(139,92,246,0.25);font-weight:500;white-space:nowrap;}
+.card-actions{position:absolute;top:10px;right:10px;display:flex;gap:4px;}
+.card-act-btn{background:none;border:none;cursor:pointer;font-size:12px;opacity:.4;transition:opacity .15s;line-height:1;padding:1px;}
+.card-act-btn:hover{opacity:1;}
+.card-act-btn.on{opacity:1;}
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;gap:10px;}
+.empty-icon{font-size:50px;filter:drop-shadow(0 0 18px rgba(255,255,255,0.08));}
+.empty-title{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;color:rgba(226,232,240,0.45);}
+.empty-sub{font-size:13px;color:var(--text-muted);}
+
+/* ── Editor ─────────────────────────────────────────── */
+#editor-panel{
+  flex:1;display:none;flex-direction:column;overflow:hidden;
+  background:rgba(255,255,255,0.03);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  animation:slideR .22s cubic-bezier(.34,1.56,.64,1);
+}
+#editor-panel.open{display:flex;}
+#editor-toolbar{
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  padding:10px 20px;border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.color-dot{width:16px;height:16px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s;flex-shrink:0;}
+.color-dot.active{border-color:#fff;box-shadow:0 0 10px currentColor;}
+.toolbar-sep{width:1px;height:20px;background:var(--border);margin:0 2px;}
+.t-btn{
+  display:flex;align-items:center;gap:5px;padding:6px 10px;border-radius:8px;
+  cursor:pointer;background:none;border:1px solid transparent;
+  font-size:12px;font-weight:500;color:var(--text-dim);font-family:'DM Sans',sans-serif;
+  transition:all .15s;
+}
+.t-btn:hover{background:rgba(255,255,255,0.08);border-color:var(--border);}
+.t-btn.on{color:var(--accent);background:var(--accent-soft);border-color:rgba(139,92,246,0.3);}
+.t-btn.danger{color:rgba(244,63,94,.65);}
+.t-btn.danger:hover{background:rgba(244,63,94,.1);border-color:rgba(244,63,94,.3);}
+.tag-pills{display:flex;gap:5px;flex-wrap:wrap;margin-left:auto;}
+.tag-pill{
+  font-size:11px;padding:3px 9px;border-radius:20px;cursor:pointer;font-weight:500;
+  background:rgba(255,255,255,0.05);color:rgba(148,163,184,0.55);
+  border:1px solid var(--border);transition:all .15s;
+}
+.tag-pill:hover{opacity:.8;}
+.tag-pill.on{background:var(--accent-soft);color:var(--accent);border-color:rgba(139,92,246,0.35);}
+#editor-body{flex:1;overflow-y:auto;padding:28px 36px;display:flex;flex-direction:column;gap:0;}
+#note-color-bar{height:3px;width:60px;border-radius:4px;margin-bottom:20px;}
+#note-title{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:28px;color:#f1f5f9;
+  background:transparent;border:none;outline:none;width:100%;margin-bottom:10px;letter-spacing:-0.5px;
+}
+#note-title::placeholder{color:rgba(148,163,184,0.3);}
+#note-meta{display:flex;align-items:center;gap:14px;margin-bottom:12px;flex-wrap:wrap;font-size:12px;color:var(--text-muted);}
+#active-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.active-tag-chip{font-size:11px;padding:3px 10px;border-radius:20px;background:var(--accent-soft);color:var(--accent);border:1px solid rgba(139,92,246,0.3);font-weight:500;}
+#mood-row{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap;align-items:center;}
+.mood-btn{font-size:18px;cursor:pointer;padding:3px 6px;border-radius:8px;background:transparent;border:1px solid transparent;transition:all .15s;}
+.mood-btn:hover{background:rgba(255,255,255,0.07);}
+.mood-btn.on{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.15);}
+.mood-btn.dim{filter:grayscale(.7) opacity(.4);}
+#mood-label{font-size:11px;color:var(--text-muted);}
+#note-body{
+  flex:1;font-size:15px;line-height:1.9;color:rgba(226,232,240,0.82);
+  background:transparent;border:none;outline:none;width:100%;resize:none;min-height:360px;
+  font-family:'DM Sans',sans-serif;letter-spacing:0.1px;caret-color:var(--accent);
+}
+#note-body::placeholder{color:rgba(148,163,184,0.3);}
+#editor-statusbar{
+  padding:6px 36px;border-top:1px solid var(--border);
+  font-size:11px;color:var(--text-muted);display:flex;gap:14px;align-items:center;flex-shrink:0;
+}
+.status-saved{color:var(--accent);font-weight:500;opacity:.8;}
+
+/* ── Modal ──────────────────────────────────────────── */
+.modal-bg{
+  position:fixed;inset:0;background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  display:none;align-items:center;justify-content:center;z-index:999;padding:20px;
+}
+.modal-bg.open{display:flex;}
+.modal{
+  width:100%;max-width:500px;background:rgba(12,14,28,0.97);
+  border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:24px;
+  box-shadow:0 24px 80px rgba(0,0,0,0.6);max-height:80vh;overflow-y:auto;
+  animation:popIn .2s ease;
+}
+.modal.sm{max-width:360px;}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.modal-title{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;color:#f1f5f9;}
+.modal-close{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:8px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(148,163,184,0.7);font-size:14px;}
+.modal-close:hover{background:rgba(255,255,255,0.12);}
+
+/* stats grid */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.stat-card{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;}
+.stat-icon{font-size:20px;margin-bottom:4px;}
+.stat-val{font-family:'Syne',sans-serif;font-weight:700;font-size:22px;color:var(--accent);}
+.stat-label{font-size:11px;color:var(--text-muted);}
+.tags-used{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;}
+
+/* templates */
+.tpl-item{
+  display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;
+  background:rgba(255,255,255,0.04);border:1px solid var(--border);cursor:pointer;
+  transition:all .15s;margin-bottom:8px;
+}
+.tpl-item:hover{background:rgba(255,255,255,0.08);border-color:var(--border-hover);}
+.tpl-icon{font-size:26px;}
+.tpl-name{font-weight:600;font-size:14px;color:#e2e8f0;margin-bottom:2px;}
+.tpl-desc{font-size:12px;color:var(--text-muted);}
+.tpl-arrow{margin-left:auto;color:var(--accent);font-size:18px;}
+
+/* confirm */
+.confirm-body{text-align:center;padding:8px 0 16px;}
+.confirm-icon{font-size:40px;margin-bottom:12px;}
+.confirm-text{font-size:13px;color:var(--text-muted);margin-bottom:20px;}
+.confirm-btns{display:flex;gap:10px;justify-content:center;}
+.btn-cancel{padding:9px 22px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid var(--border);color:#e2e8f0;cursor:pointer;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;}
+.btn-danger{padding:9px 22px;border-radius:10px;background:rgba(244,63,94,.18);border:1px solid rgba(244,63,94,.35);color:#f43f5e;cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;}
+.btn-cancel:hover{background:rgba(255,255,255,0.1);}
+.btn-danger:hover{background:rgba(244,63,94,.28);}
+
+/* ── Toast ──────────────────────────────────────────── */
+#toast{
+  position:fixed;bottom:26px;left:50%;transform:translateX(-50%);
+  padding:10px 22px;border-radius:20px;
+  background:rgba(20,22,40,0.95);border:1px solid rgba(255,255,255,0.12);
+  backdrop-filter:blur(24px);color:#e2e8f0;font-size:13px;font-weight:500;
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);z-index:9999;
+  display:none;white-space:nowrap;animation:fadeUp .3s ease;
+}
+#toast.show{display:block;}
+
+/* ── Trash actions ──────────────────────────────────── */
+#trash-actions{display:none;justify-content:flex-end;margin-bottom:4px;}
+#trash-actions.show{display:flex;}
+.btn-empty-trash{background:rgba(244,63,94,.15);color:#f43f5e;border:1px solid rgba(244,63,94,.3);border-radius:9px;padding:6px 14px;font-size:12px;cursor:pointer;font-weight:500;font-family:'DM Sans',sans-serif;}
+
+/* ── Animations ─────────────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+@keyframes slideR{from{opacity:0;transform:translateX(18px);}to{opacity:1;transform:translateX(0);}}
+@keyframes popIn{from{opacity:0;transform:scale(.93);}to{opacity:1;transform:scale(1);}}
 </style>
 </head>
 <body>
 
-<div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar"></div></div>
-<div class="progress-widget">
-  <div>
-    <div class="progress-pct" id="progressPct">0%</div>
-    <div class="progress-label">SESSIONS<br>DONE</div>
-  </div>
-  <div>
-    <div class="progress-label" id="progressCount" style="font-size:0.75rem; color: var(--text)">0/70</div>
-    <div class="progress-label">TOTAL</div>
-  </div>
-  <button class="reset-btn" onclick="resetProgress()">RESET</button>
+<!-- Aurora BG -->
+<div id="aurora">
+  <div class="blob" id="b1"></div>
+  <div class="blob" id="b2"></div>
+  <div class="blob" id="b3"></div>
+  <div id="grid-overlay"></div>
 </div>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="badge">10-WEEK STUDY CALENDAR — CRACK ANY ROLE</div>
-  <h1>
-    <span class="g1">MERN</span><br>
-    <span style="color: var(--text)">+ AI +</span><br>
-    <span class="g2">C++ DSA</span>
-  </h1>
-  <p class="hero-sub">Two battle-tested roadmaps to land your dream SDE role — from JS basics to system design, in 10 focused weeks.</p>
-  <div class="hero-stats">
-    <div class="stat">
-      <div class="stat-num mern-col">70</div>
-      <div class="stat-label">DAILY EVENTS</div>
+<div id="app">
+  <!-- ── Topbar ── -->
+  <div id="topbar">
+    <button id="menu-btn" title="Toggle sidebar">☰</button>
+    <div class="logo">◈ Glasspad</div>
+
+    <div id="search-wrap">
+      <span class="search-icon">⌕</span>
+      <input id="search" placeholder="Search notes… (Ctrl+K)" autocomplete="off"/>
+      <button id="search-clear">✕</button>
     </div>
-    <div class="stat">
-      <div class="stat-num" style="color:var(--gold)">10</div>
-      <div class="stat-label">WEEKS</div>
+
+    <!-- Accent picker -->
+    <div class="accent-row" id="accent-row"></div>
+    <div class="divider-v"></div>
+
+    <!-- View toggle -->
+    <div class="view-toggle">
+      <button class="vbtn active" id="vbtn-grid" title="Grid view">⊞</button>
+      <button class="vbtn" id="vbtn-list" title="List view">☰</button>
     </div>
-    <div class="stat">
-      <div class="stat-num cpp-col">2</div>
-      <div class="stat-label">ROADMAPS</div>
+
+    <button class="top-btn" id="stats-btn">📊 Stats</button>
+    <button class="top-btn" id="tpl-btn">⚡ Templates</button>
+    <button id="new-note-btn">+ New Note</button>
+  </div>
+
+  <!-- ── Main ── -->
+  <div id="main">
+    <!-- Sidebar -->
+    <div id="sidebar">
+      <div class="sb-section">Navigate</div>
+      <div class="sb-item active" data-panel="notes">
+        <span>✦</span><span>All Notes</span><span class="sb-badge" id="badge-notes">0</span>
+      </div>
+      <div class="sb-item" data-panel="favorites">
+        <span>♥</span><span>Favorites</span><span class="sb-badge" id="badge-favs">0</span>
+      </div>
+      <div class="sb-item" data-panel="trash">
+        <span>🗑</span><span>Trash</span><span class="sb-badge" id="badge-trash">0</span>
+      </div>
+
+      <div class="sb-divider"></div>
+      <div class="sb-section">Sort By</div>
+      <div class="sb-item active" data-sort="updated">⏱ Last Edited</div>
+      <div class="sb-item" data-sort="created">📅 Date Created</div>
+      <div class="sb-item" data-sort="alpha">🔤 Alphabetical</div>
+
+      <div class="sb-divider"></div>
+      <div class="sb-section">Tags</div>
+      <div class="sb-item active" data-tag="__all__">◈ All Notes</div>
+      <div id="tag-list"></div>
+
+      <div class="streak-box" style="margin-top:auto;">
+        <div style="font-size:22px;margin-bottom:4px;">🔥</div>
+        <div class="streak-num" id="streak-num">0</div>
+        <div class="streak-label">day streak</div>
+      </div>
+    </div>
+
+    <!-- Note list -->
+    <div id="note-list-wrap" class="full">
+      <div id="trash-actions">
+        <button class="btn-empty-trash" id="empty-trash-btn">Empty Trash</button>
+      </div>
+      <div id="note-grid"></div>
+      <div id="empty-state" class="empty-state" style="display:none;">
+        <div class="empty-icon">✦</div>
+        <div class="empty-title">Nothing here yet</div>
+        <div class="empty-sub">Press Ctrl+N or click + New Note</div>
+      </div>
+    </div>
+
+    <!-- Editor -->
+    <div id="editor-panel">
+      <div id="editor-toolbar">
+        <div id="color-dots"></div>
+        <div class="toolbar-sep"></div>
+        <button class="t-btn" id="btn-pin">📌 Pin</button>
+        <button class="t-btn" id="btn-fav">♥ Favorite</button>
+        <button class="t-btn" id="btn-copy">📋 Copy</button>
+        <button class="t-btn" id="btn-dup">⎘ Duplicate</button>
+        <button class="t-btn" id="btn-export">⬇ Export</button>
+        <div class="tag-pills" id="tag-pills"></div>
+        <button class="t-btn danger" id="btn-del">🗑</button>
+      </div>
+      <div id="editor-body">
+        <div id="note-color-bar"></div>
+        <input id="note-title" placeholder="Untitled note…"/>
+        <div id="note-meta"></div>
+        <div id="active-tags"></div>
+        <div id="mood-row"></div>
+        <textarea id="note-body" placeholder="Begin writing…"></textarea>
+      </div>
+      <div id="editor-statusbar">
+        <span class="status-saved">● Auto-saved</span>
+        <span id="status-words">0 words</span>
+        <span id="status-chars">0 chars</span>
+        <span id="status-read">~1 min read</span>
+        <span id="status-mood" style="margin-left:auto;"></span>
+      </div>
     </div>
   </div>
-  <div class="scroll-hint">↓ SCROLL TO EXPLORE</div>
 </div>
 
-<div class="accent-line"></div>
-
-<!-- COMPARE -->
-<section>
-  <div class="section-label">// 01 — CHOOSE YOUR PATH</div>
-  <div class="section-title">WHICH ROADMAP?</div>
-
-  <div class="compare-grid">
-
-    <div class="compare-card mern-card">
-      <span class="card-tag mern-tag">ROADMAP A</span>
-      <div class="card-name">MERN + AI</div>
-      <p class="card-desc">Pure full-stack focus. JavaScript, React, Node, MongoDB, with AI (OpenAI API) integrated in Week 4+. LeetCode DSA runs alongside.</p>
-      <ul class="card-pros">
-        <li>Best for startup / full-stack / frontend roles</li>
-        <li>Faster path to building portfolio projects</li>
-        <li>AI features make your projects stand out</li>
-        <li>Deploy real apps by Week 3 (Render + Vercel)</li>
-        <li>NeetCode-style LeetCode progression</li>
-      </ul>
+<!-- ── Stats Modal ── -->
+<div class="modal-bg" id="stats-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📊 Your Writing Stats</div>
+      <button class="modal-close" data-close="stats-modal">✕</button>
     </div>
-
-    <div class="compare-card cpp-card">
-      <span class="recommended-badge">★ RECOMMENDED</span>
-      <span class="card-tag cpp-tag">ROADMAP B</span>
-      <div class="card-name">MERN + AI + C++ DSA</div>
-      <p class="card-desc">Same MERN+AI track but with a parallel C++ DSA lane using Striver's TUF sheet — the gold standard for product company interviews.</p>
-      <ul class="card-pros">
-        <li>Best for FAANG / product companies / SDE-2 roles</li>
-        <li>C++ STL from Day 1 — industry interview standard</li>
-        <li>TUF (Striver's) sheet — battle-tested by 100k+ students</li>
-        <li>Covers arrays → graphs → DP → tries systematically</li>
-        <li>Same projects + stronger DSA = full package</li>
-      </ul>
+    <div class="stats-grid" id="stats-grid"></div>
+    <div id="tags-used-wrap" style="display:none;">
+      <div style="font-size:12px;color:var(--text-muted);margin-top:16px;margin-bottom:8px;">Tags in Use</div>
+      <div class="tags-used" id="tags-used"></div>
     </div>
-
   </div>
+</div>
 
-  <!-- VERDICT -->
-  <div class="verdict-box">
-    <div class="verdict-title">⚡ THE VERDICT</div>
-    <p class="verdict-text">Both roadmaps share the same MERN + AI curriculum. The difference is in the DSA track. If you're targeting companies where the coding round is the real filter — pick Roadmap B. Roadmap A is still solid if you're focused purely on full-stack / startup ecosystem roles.</p>
-    <div class="verdict-grid">
-      <div class="verdict-item">
-        <div class="verdict-item-title mern-col">PICK ROADMAP A IF...</div>
-        <p>You're targeting startups, SaaS companies, frontend-heavy roles, or just want to build a strong portfolio ASAP.</p>
-      </div>
-      <div class="verdict-item">
-        <div class="verdict-item-title cpp-col">PICK ROADMAP B IF...</div>
-        <p>You're targeting Amazon, Google, Flipkart, Dream11, or any company where DSA rounds are elimination rounds. This is your weapon.</p>
+<!-- ── Templates Modal ── -->
+<div class="modal-bg" id="tpl-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">⚡ Note Templates</div>
+      <button class="modal-close" data-close="tpl-modal">✕</button>
+    </div>
+    <div id="tpl-list"></div>
+  </div>
+</div>
+
+<!-- ── Delete Confirm Modal ── -->
+<div class="modal-bg" id="del-modal">
+  <div class="modal sm">
+    <div class="modal-header">
+      <div class="modal-title" id="del-modal-title">Move to Trash?</div>
+      <button class="modal-close" data-close="del-modal">✕</button>
+    </div>
+    <div class="confirm-body">
+      <div class="confirm-icon">🗑</div>
+      <div class="confirm-text" id="del-modal-text">You can restore it from Trash later.</div>
+      <div class="confirm-btns">
+        <button class="btn-cancel" data-close="del-modal">Cancel</button>
+        <button class="btn-danger" id="del-confirm-btn">Move to Trash</button>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<div class="accent-line cpp-line"></div>
-
-<!-- WEEK TIMELINE -->
-<section>
-  <div class="section-label">// 02 — FULL CURRICULUM</div>
-  <div class="section-title">10-WEEK BREAKDOWN</div>
-
-  <div class="phases" id="phases">
-    <button class="phase-btn active" onclick="filterPhase('all', this)">ALL WEEKS</button>
-    <button class="phase-btn" onclick="filterPhase('1,2', this)">⚡ PHASE 1 — FOUNDATIONS (W1-2)</button>
-    <button class="phase-btn" onclick="filterPhase('3,4', this)">🛠️ PHASE 2 — BUILD + AI (W3-4)</button>
-    <button class="phase-btn" onclick="filterPhase('5,6', this)">🚀 PHASE 3 — ADVANCED (W5-6)</button>
-    <button class="phase-btn" onclick="filterPhase('7,8,9,10', this)">💼 PHASE 4 — INTERVIEW GRIND (W7-10)</button>
-  </div>
-
-  <div class="weeks-grid" id="weeksGrid"></div>
-</section>
-
-<footer>
-  CRACK ANY ROLE ROADMAP &nbsp;|&nbsp; 10 WEEKS &nbsp;|&nbsp; 70 SESSIONS &nbsp;|&nbsp; VALORANT 🎮 EVERY NIGHT
-</footer>
+<!-- ── Toast ── -->
+<div id="toast"></div>
 
 <script>
-const weeks = [
-  {
-    week: 1,
-    theme: "JS Foundations + Node + Express + Arrays DSA",
-    days: [
-      { label: "W1 MON", mern: "JS Setup — Variables, Functions, Scope, ES6 basics", cpp: "C++ STL Intro — vectors, pairs, maps, sets, priority_queue" },
-      { label: "W1 TUE", mern: "Async JS — Promises, async/await, Array methods", cpp: "Arrays Easy — Largest Element, Second Largest, Remove Duplicates" },
-      { label: "W1 WED", mern: "Event Loop, Node.js — fs, path, modules, CLI tool", cpp: "Arrays Medium — Left Rotate by K, Move Zeroes" },
-      { label: "W1 THU", mern: "Express.js — routing, middleware, REST CRUD API", cpp: "Arrays Medium — Union of Two Sorted Arrays, Missing Number" },
-      { label: "W1 FRI", mern: "Express Middleware, Error Handling, pagination + search", cpp: "Arrays Hard — Two Sum, Best Time to Buy Stock" },
-      { label: "W1 SAT", mern: "MongoDB Atlas setup, Mongoose, full CRUD Notes API", cpp: "Arrays Hard block — 3Sum, Kadane's Algorithm, Merge Sorted Arrays" },
-      { label: "W1 SUN", mern: "JS deep dive — Prototypes, 'this' keyword, cheat sheet", cpp: "Binary Search — Floor/Ceil, First & Last Position, Binary Search on Answers" },
-    ]
-  },
-  {
-    week: 2,
-    theme: "MongoDB + JWT Auth + React Foundations + LinkedLists DSA",
-    days: [
-      { label: "W2 MON", mern: "MongoDB Advanced — Indexing, Aggregation Pipeline ($match/$group/$lookup)", cpp: "Binary Search Hard — Median of Two Sorted Arrays, Gas Stations" },
-      { label: "W2 TUE", mern: "JWT Auth — bcrypt, register/login, auth middleware, refresh tokens", cpp: "Strings — Reverse Words, Longest Common Prefix, string methods in C++" },
-      { label: "W2 WED", mern: "React Foundations — JSX, components, props, useState, Todo UI", cpp: "Linked Lists — Reverse LL, Middle, Detect Cycle (Floyd's)" },
-      { label: "W2 THU", mern: "React Hooks — useEffect, useRef, useContext, ThemeContext", cpp: "Linked Lists Medium — Merge Two Sorted, Remove Nth, Add Two Numbers" },
-      { label: "W2 FRI", mern: "React Router v6 — protected routes, React Hook Form", cpp: "Linked Lists Hard — Reverse K-Group, Flatten LL, LRU Cache" },
-      { label: "W2 SAT", mern: "Connect React → Express via Axios, CORS, Login flow, MongoDB display", cpp: "Stacks & Queues — Valid Parentheses, Next Greater Element, Min Stack" },
-      { label: "W2 SUN", mern: "Build end-to-end Notes App: React + Express + MongoDB + JWT. Deploy.", cpp: "Stacks Hard — Largest Rectangle in Histogram, Trapping Rain Water" },
-    ]
-  },
-  {
-    week: 3,
-    theme: "Project 1 Build (Job Board / Blog) + Trees DSA",
-    days: [
-      { label: "W3 MON", mern: "Project 1 Planning — schemas, API routes, wireframe on Excalidraw", cpp: "Trees Intro — Inorder/Preorder/Postorder (recursive + iterative), Height, Diameter" },
-      { label: "W3 TUE", mern: "Project 1 Backend Setup — folder structure, User model, auth routes", cpp: "Trees Medium — Level Order, Zigzag, Vertical Order Traversal, Max Width" },
-      { label: "W3 WED", mern: "Project 1 All CRUD APIs — search ($regex), pagination, Postman collection", cpp: "Trees Hard — Max Path Sum, Construct BT from Preorder+Inorder, LCA" },
-      { label: "W3 THU", mern: "Project 1 React Setup — Vite + Tailwind, router, reusable components, shadcn/ui", cpp: "BST — Search, Insert, Delete, Validate BST, Kth Smallest, LCA in BST" },
-      { label: "W3 FRI", mern: "Project 1 Auth + API Integration — Axios interceptors, Auth context, Protected Route", cpp: "Heaps — Kth Largest, Top K Frequent, K Closest Points, Merge K Sorted Lists" },
-      { label: "W3 SAT", mern: "Project 1 Core UI — main pages, connect to APIs, react-hot-toast, deploy live", cpp: "Heaps Hard — Find Median from Data Stream (two heaps), Task Scheduler" },
-      { label: "W3 SUN", mern: "Project 1 final fixes, README, push to GitHub, add to LinkedIn", cpp: "Greedy — Jump Game I & II, N Meetings, Minimum Platforms, Job Sequencing" },
-    ]
-  },
-  {
-    week: 4,
-    theme: "AI Features (OpenAI API) + Redux + Graphs DSA",
-    days: [
-      { label: "W4 MON", mern: "OpenAI API — Chat Completions, /api/chat Express endpoint", cpp: "Graphs — Adjacency list/matrix, BFS traversal, DFS traversal" },
-      { label: "W4 TUE", mern: "Prompt Engineering — zero-shot, few-shot, CoT, system prompts, coding chatbot", cpp: "Graphs — Number of Islands, Flood Fill, Rotten Oranges (multi-source BFS)" },
-      { label: "W4 WED", mern: "AI Chat UI in React — message bubbles, typing indicator, react-markdown", cpp: "Topological Sort — Kahn's BFS algo, Course Schedule I & II" },
-      { label: "W4 THU", mern: "Add AI feature to Project 1 (Job Description Generator or Post Summarizer)", cpp: "Shortest Path — Dijkstra's, Bellman-Ford, Network Delay Time" },
-      { label: "W4 FRI", mern: "Streaming (SSE), rate limiting (express-rate-limit), input validation", cpp: "MST + Disjoint Set — Kruskal's, Prim's, Union-Find (rank + path compression)" },
-      { label: "W4 SAT", mern: "Redux Toolkit — createSlice, configureStore, RTK Query, refactor auth state", cpp: "Graphs Hard — Alien Dictionary, Kosaraju's SCC, Bridges, Articulation Points" },
-      { label: "W4 SUN", mern: "Plan Project 2 (AI Resume Builder / Interview Prep / Cover Letter / Smart Notes)", cpp: "Dynamic Programming Intro — Climbing Stairs, Frog Jump, House Robber, DP on Grids" },
-    ]
-  },
-  {
-    week: 5,
-    theme: "Project 2 (AI-Powered App) + DP DSA",
-    days: [
-      { label: "W5 MON", mern: "Project 2 Backend — Express, Mongoose, all models, auth + CRUD routes", cpp: "DP Subsequences — Subset Sum, Partition Equal Subset, 0/1 Knapsack" },
-      { label: "W5 TUE", mern: "Project 2 AI Core — main AI endpoint, conversation history in MongoDB, streaming", cpp: "DP Strings — LCS, Edit Distance, Longest Common Substring, Distinct Subsequences" },
-      { label: "W5 WED", mern: "Project 2 React Frontend — Vite, all pages, connect to backend", cpp: "DP on Stocks — Best Time to Buy/Sell (multiple transactions, cooldown, fee)" },
-      { label: "W5 THU", mern: "Project 2 Auth + Connect — Axios interceptors, error handling, loading states", cpp: "DP LIS — Longest Increasing Subsequence (O(n log n)), Russian Doll Envelopes" },
-      { label: "W5 FRI", mern: "Project 2 Polish — mobile responsive, empty states, react-hot-toast, deploy", cpp: "DP Partition — Matrix Chain Multiplication, Burst Balloons, Palindrome Partitioning" },
-      { label: "W5 SAT", mern: "System Design: DB Design — SQL vs NoSQL, Normalization, DB Indexing deep dive", cpp: "DP Hard practice block + System Design: Vertical vs Horizontal Scaling, Sharding" },
-      { label: "W5 SUN", mern: "TypeScript intro — types, interfaces, generics, convert Notes App to TS", cpp: "Tries + Segment Trees — Trie insert/search, prefix problems, range queries" },
-    ]
-  },
-  {
-    week: 6,
-    theme: "Advanced Backend + System Design Case Studies",
-    days: [
-      { label: "W6 MON", mern: "Node.js Security + Performance — Helmet, rate limiting, compression, N+1 problem", cpp: "Recursion deep dive — subsets, permutations, all paths" },
-      { label: "W6 TUE", mern: "Testing — Jest, Supertest, unit tests for controllers", cpp: "Backtracking Hard — N-Queens, Sudoku Solver, Word Search" },
-      { label: "W6 WED", mern: "Docker Basics — Dockerfile, docker-compose for MERN stack", cpp: "Two Pointers advanced problems" },
-      { label: "W6 THU", mern: "CI/CD with GitHub Actions — auto-deploy to Render on push", cpp: "Sliding Window advanced — hard problems" },
-      { label: "W6 FRI", mern: "WebSockets — Socket.io, real-time chat feature", cpp: "Monotonic Stack — hard problems" },
-      { label: "W6 SAT", mern: "System Design: URL Shortener + Pastebin (design both end-to-end)", cpp: "System Design continued — consistent hashing, message queues" },
-      { label: "W6 SUN", mern: "System Design: Twitter/X Feed + NestJS intro (controllers, services, modules)", cpp: "NestJS + System Design continued" },
-    ]
-  },
-  {
-    week: 7,
-    theme: "Resume, Applying, Technical Interview Prep",
-    days: [
-      { label: "W7 MON", mern: "Resume crafting — ATS-friendly format, quantify impact, projects section", cpp: "DSA Hard — mixed set, timed 45 min per problem" },
-      { label: "W7 TUE", mern: "LinkedIn + GitHub polish — profile photo, headline, pinned repos, READMEs", cpp: "DSA Hard — mixed set continued" },
-      { label: "W7 WED", mern: "Start applying — 20+ applications, cold outreach on LinkedIn", cpp: "Interview simulation — mock coding round, timed" },
-      { label: "W7 THU", mern: "Technical Interview: JS Deep — closures, event loop, this, promises, event delegation", cpp: "C++ Interview Qs — memory management, pointers, STL internals" },
-      { label: "W7 FRI", mern: "Technical Interview: React + Node — hooks under the hood, reconciliation, cluster", cpp: "DSA Hard — graphs + DP mixed" },
-      { label: "W7 SAT", mern: "System Design: Netflix (CDN, video streaming, microservices) + Mock Interview", cpp: "Mock Interview: full loop — DSA + System Design + behavioral" },
-      { label: "W7 SUN", mern: "System Design: WhatsApp (WebSockets, message queues, end-to-end encryption)", cpp: "DSA Marathon — 4 hard problems timed" },
-    ]
-  },
-  {
-    week: 8,
-    theme: "Interview Simulation Week — Full Mock Loops",
-    days: [
-      { label: "W8 MON", mern: "Interview Prep: MongoDB + REST APIs — deep revision, common interview Qs", cpp: "DSA Hard — graphs week" },
-      { label: "W8 TUE", mern: "System Design Practice: Rate Limiter (token bucket, sliding window counter)", cpp: "DSA Hard — DP week" },
-      { label: "W8 WED", mern: "Behavioral Interview Prep — STAR method, 10 stories (leadership, failure, conflict)", cpp: "DSA: Timed Mock — 3 problems, 90 minutes" },
-      { label: "W8 THU", mern: "Project Deep Dive Prep — explain architecture, trade-offs, what you'd do differently", cpp: "DSA Hard — mixed" },
-      { label: "W8 FRI", mern: "Full Mock Technical Interview — coding + system design + behavioral (3 hrs)", cpp: "DSA Hard — final push" },
-      { label: "W8 SAT", mern: "System Design: Uber (geolocation, matching algorithm, surge pricing) + Mass Apply", cpp: "Mass Apply + System Design review" },
-      { label: "W8 SUN", mern: "LangChain + RAG basics — vector DBs, embeddings, RAG pipeline", cpp: "DSA Contest — participate in Codeforces/LeetCode weekly" },
-    ]
-  },
-  {
-    week: 9,
-    theme: "Advanced Topics + Active Job Search",
-    days: [
-      { label: "W9 MON", mern: "TypeScript Advanced — generics, utility types, decorators, TS in React", cpp: "Graph Algorithms Hard — advanced flow, matching" },
-      { label: "W9 TUE", mern: "Apply + Follow Up — track applications, follow up with recruiters, referrals", cpp: "DP Hard — advanced problems" },
-      { label: "W9 WED", mern: "Salary Negotiation Prep — market rates, counter-offer strategies, total comp", cpp: "DSA Hard Mixed" },
-      { label: "W9 THU", mern: "Node.js Internals for Interviews — libuv, cluster, worker threads, streams deep", cpp: "DSA Hard — final hard problems" },
-      { label: "W9 FRI", mern: "React Performance + Web Vitals — memo, useMemo, useCallback, lazy, Suspense", cpp: "DSA Final Hard set" },
-      { label: "W9 SAT", mern: "System Design: Google Drive (chunked upload, file sharing, sync) + Full Mock", cpp: "Full Mock Interview Loop" },
-      { label: "W9 SUN", mern: "System Design: Search Autocomplete (trie, ranking, caching) + DSA Marathon", cpp: "DSA Marathon — 5 hard problems" },
-    ]
-  },
-  {
-    week: 10,
-    theme: "Final Review + Mass Apply + Ongoing Plan",
-    days: [
-      { label: "W10 MON", mern: "Final Tech Review: Backend — Express, MongoDB, JWT, Redis, Docker", cpp: "DSA Hard — final weak spots" },
-      { label: "W10 TUE", mern: "Final Tech Review: Frontend + C++ — React patterns, TS, performance", cpp: "DSA final round" },
-      { label: "W10 WED", mern: "System Design Final Review — all 8 case studies, common patterns, trade-offs", cpp: "System Design final" },
-      { label: "W10 THU", mern: "DSA Weak Spot Final Push — revisit problems you got wrong", cpp: "C++ final hard set" },
-      { label: "W10 FRI", mern: "Final Full Mock Interview — 3-hour end-to-end simulation", cpp: "Final Mock" },
-      { label: "W10 SAT", mern: "Mass Apply — 50+ applications, LinkedIn Easy Apply blitz, portfolio final check", cpp: "Portfolio + apply" },
-      { label: "W10 SUN", mern: "Reflect — what worked, what didn't. Create your ongoing plan beyond 10 weeks.", cpp: "Plan the next chapter 🚀" },
-    ]
-  }
+/* ═══════════════════════════════════════════════════════
+   DATA & STATE
+═══════════════════════════════════════════════════════ */
+const ACCENTS = [
+  {val:"#8b5cf6",glow:"rgba(139,92,246,0.35)"},
+  {val:"#06b6d4",glow:"rgba(6,182,212,0.35)"},
+  {val:"#f43f5e",glow:"rgba(244,63,94,0.35)"},
+  {val:"#f59e0b",glow:"rgba(245,158,11,0.35)"},
+  {val:"#10b981",glow:"rgba(16,185,129,0.35)"},
+  {val:"#3b82f6",glow:"rgba(59,130,246,0.35)"},
+];
+const NOTE_COLORS = ["#6d28d9","#0e7490","#be123c","#b45309","#065f46","#1d4ed8","#9333ea","#0f766e"];
+const ALL_TAGS = ["work","personal","idea","todo","important","journal","project","meeting","learning","health"];
+const MOODS = [{icon:"🌟",l:"Inspired"},{icon:"😌",l:"Calm"},{icon:"🔥",l:"Focused"},{icon:"💭",l:"Reflective"},{icon:"😤",l:"Frustrated"},{icon:"🎉",l:"Excited"},{icon:"😴",l:"Tired"},{icon:"🤔",l:"Curious"}];
+const TEMPLATES = [
+  {label:"Daily Journal",icon:"📔",desc:"Morning pages & gratitude",body:`## ${new Date().toDateString()}\n\n### What happened today\n\n\n### What I'm grateful for\n1. \n2. \n3. \n\n### Tomorrow's focus\n\n`},
+  {label:"Meeting Notes",icon:"🤝",desc:"Agenda, decisions, action items",body:`## Meeting Notes\nDate: ${fmtDate(new Date())}\nAttendees: \n\n### Agenda\n\n### Key Decisions\n\n### Action Items\n- [ ] \n\n### Follow-up\n`},
+  {label:"Idea Capture",icon:"💡",desc:"Braindump a new idea fast",body:`## Idea\n\n### Problem it solves\n\n### How it works\n\n### Next steps\n1. \n2. \n`},
+  {label:"Quick Todo",icon:"✅",desc:"Simple task checklist",body:`## Todo — ${fmtDate(new Date())}\n\n- [ ] \n- [ ] \n- [ ] \n`},
+  {label:"Weekly Review",icon:"📊",desc:"Wins, challenges, priorities",body:`## Weekly Review\n\n### Wins 🏆\n\n### Challenges 😤\n\n### Learnings 📚\n\n### Next week's priorities\n1. \n2. \n3. \n`},
 ];
 
-const STORAGE_KEY = 'roadmap_progress_v1';
-const TOTAL = weeks.reduce((acc, w) => acc + w.days.length, 0);
+let notes   = load("gp_notes",[]);
+let trash   = load("gp_trash",[]);
+let accentI = parseInt(load("gp_accent","0"));
+let panel   = "notes"; // notes | favorites | trash
+let sortBy  = "updated";
+let filterTag = null;
+let viewMode  = "grid";  // grid | list
+let activeId  = null;
+let sidebarVisible = true;
+let pendingDeleteId = null;
+let pendingDeletePerm = false;
+let toastTimer = null;
 
-const phaseMap = {
-  'all': [1,2,3,4,5,6,7,8,9,10],
-  '1,2': [1,2],
-  '3,4': [3,4],
-  '5,6': [5,6],
-  '7,8,9,10': [7,8,9,10]
+function load(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def;}catch{return def;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}}
+function uid(){return Math.random().toString(36).slice(2)+Date.now().toString(36);}
+function fmtDate(d){return new Date(d).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});}
+function fmtTime(d){return new Date(d).toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"});}
+function wc(t){return t.trim()?t.trim().split(/\s+/).length:0;}
+function readTime(w){return Math.max(1,Math.ceil(w/200));}
+function todayStr(){return new Date().toDateString();}
+
+function mkNote(ov={}){
+  return {id:uid(),title:"",body:"",color:NOTE_COLORS[0],tags:[],pinned:false,mood:null,favorite:false,
+    createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),wordCount:0,charCount:0,...ov};
+}
+
+/* ═══════════════════════════════════════════════════════
+   ACCENT / THEME
+═══════════════════════════════════════════════════════ */
+function applyAccent(i){
+  const a = ACCENTS[i];
+  document.documentElement.style.setProperty("--accent",a.val);
+  document.documentElement.style.setProperty("--accent-glow",a.glow);
+  document.documentElement.style.setProperty("--accent-soft",a.glow.replace("0.35","0.15"));
+  document.getElementById("b1").style.background=`radial-gradient(circle,${a.glow} 0%,transparent 70%)`;
+  save("gp_accent",i);
+}
+
+function buildAccentRow(){
+  const row = document.getElementById("accent-row");
+  row.innerHTML="";
+  ACCENTS.forEach((a,i)=>{
+    const d=document.createElement("div");
+    d.className="adot"+(i===accentI?" active":"");
+    d.style.background=a.val;
+    d.title=`Theme ${i+1}`;
+    d.onclick=()=>{
+      accentI=i;
+      document.querySelectorAll(".adot").forEach((x,j)=>x.classList.toggle("active",j===i));
+      applyAccent(i);
+    };
+    row.appendChild(d);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════
+   SIDEBAR TAGS
+═══════════════════════════════════════════════════════ */
+function buildTagList(){
+  const el=document.getElementById("tag-list");
+  el.innerHTML="";
+  const used=[...new Set(notes.flatMap(n=>n.tags))];
+  used.forEach(t=>{
+    const d=document.createElement("div");
+    d.className="sb-item"+(filterTag===t?" active":"");
+    d.dataset.tag=t;
+    d.innerHTML=`<span>#${t}</span><span class="sb-badge">${notes.filter(n=>n.tags.includes(t)).length}</span>`;
+    d.onclick=()=>{filterTag=filterTag===t?null:t;renderAll();};
+    el.appendChild(d);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════
+   STREAK
+═══════════════════════════════════════════════════════ */
+function calcStreak(){
+  let s=0,d=new Date();
+  while(notes.some(n=>new Date(n.updatedAt).toDateString()===d.toDateString())){s++;d.setDate(d.getDate()-1);}
+  return s;
+}
+
+/* ═══════════════════════════════════════════════════════
+   NOTE FILTERING
+═══════════════════════════════════════════════════════ */
+function getFiltered(){
+  const q=document.getElementById("search").value.trim().toLowerCase();
+  let pool = panel==="favorites"?notes.filter(n=>n.favorite):panel==="trash"?trash:notes;
+  if(q) pool=pool.filter(n=>n.title.toLowerCase().includes(q)||n.body.toLowerCase().includes(q));
+  if(filterTag&&panel==="notes") pool=pool.filter(n=>n.tags.includes(filterTag));
+  pool=[...pool].sort((a,b)=>{
+    if(panel!=="trash"&&a.pinned!==b.pinned)return a.pinned?-1:1;
+    if(sortBy==="alpha")return a.title.localeCompare(b.title);
+    if(sortBy==="created")return new Date(b.createdAt)-new Date(a.createdAt);
+    return new Date(b.updatedAt)-new Date(a.updatedAt);
+  });
+  return pool;
+}
+
+/* ═══════════════════════════════════════════════════════
+   RENDER NOTE CARDS
+═══════════════════════════════════════════════════════ */
+function renderCards(){
+  const grid=document.getElementById("note-grid");
+  const empty=document.getElementById("empty-state");
+  const filtered=getFiltered();
+
+  // trash header
+  const ta=document.getElementById("trash-actions");
+  ta.classList.toggle("show",panel==="trash"&&trash.length>0);
+
+  // view mode on grid
+  grid.className=viewMode==="grid"&&!activeId?"note-grid grid-view":"note-grid";
+
+  if(filtered.length===0){grid.innerHTML="";empty.style.display="flex";}
+  else{
+    empty.style.display="none";
+    grid.innerHTML="";
+    filtered.forEach((note,i)=>{
+      const div=document.createElement("div");
+      div.className="note-card"+(note.id===activeId?" active":"");
+      div.style.animationDelay=`${i*0.04}s`;
+      const isTrash=panel==="trash";
+      div.innerHTML=`
+        <div class="card-topbar-line" style="background:${note.color};box-shadow:0 0 8px ${note.color};"></div>
+        <div class="card-actions">
+          ${!isTrash?`<button class="card-act-btn ${note.pinned?"on":""}" data-action="pin" title="Pin">📌</button>
+          <button class="card-act-btn ${note.favorite?"on":""}" data-action="fav" title="Favorite" style="color:#f59e0b;">♥</button>`:""}
+          ${isTrash?`<button class="card-act-btn" data-action="restore" title="Restore" style="color:var(--accent);font-size:14px;">♻</button>`:""}
+          <button class="card-act-btn" data-action="del" title="Delete" style="color:rgba(244,63,94,.65);">✕</button>
+        </div>
+        <div class="card-title">${esc(note.title)||"Untitled"}</div>
+        ${!activeId&&viewMode==="grid"?`<div class="card-preview">${esc(note.body)||"No content yet…"}</div>`:""}
+        <div class="card-footer">
+          <span class="card-date">${new Date(note.updatedAt).toLocaleDateString("en-US",{month:"short",day:"numeric"})}${note.wordCount?" · "+note.wordCount+"w":""}</span>
+          <div class="card-tags">
+            ${note.mood?`<span style="font-size:12px;">${MOODS.find(m=>m.l===note.mood)?.icon||""}</span>`:""}
+            ${note.tags.slice(0,2).map(t=>`<span class="card-tag">#${t}</span>`).join("")}
+          </div>
+        </div>
+      `;
+      // click card → open editor
+      div.addEventListener("click",e=>{
+        if(e.target.closest("[data-action]"))return;
+        if(isTrash)return;
+        activeId = activeId===note.id ? null : note.id;
+        renderAll();
+      });
+      // action buttons
+      div.querySelectorAll("[data-action]").forEach(btn=>{
+        btn.addEventListener("click",e=>{
+          e.stopPropagation();
+          const a=btn.dataset.action;
+          if(a==="pin"){togglePin(note.id);}
+          else if(a==="fav"){toggleFav(note.id);}
+          else if(a==="del"){openDelConfirm(note.id,panel==="trash");}
+          else if(a==="restore"){restoreNote(note.id);}
+        });
+      });
+      grid.appendChild(div);
+    });
+  }
+}
+
+function esc(s=""){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+/* ═══════════════════════════════════════════════════════
+   EDITOR
+═══════════════════════════════════════════════════════ */
+function renderEditor(){
+  const ep=document.getElementById("editor-panel");
+  if(!activeId){ep.classList.remove("open");return;}
+  const note=notes.find(n=>n.id===activeId);
+  if(!note){ep.classList.remove("open");return;}
+  ep.classList.add("open");
+
+  // color bar
+  document.getElementById("note-color-bar").style.cssText=`height:3px;width:60px;border-radius:4px;margin-bottom:20px;background:${note.color};box-shadow:0 0 12px ${note.color}88;`;
+
+  // color dots
+  buildColorDots(note);
+  buildTagPills(note);
+  buildMoodRow(note);
+
+  document.getElementById("note-title").value=note.title;
+  document.getElementById("note-body").value=note.body;
+
+  // meta
+  document.getElementById("note-meta").innerHTML=`
+    <span>${fmtDate(note.createdAt)}</span>
+    <span>Edited ${fmtTime(note.updatedAt)}</span>
+    <span>${note.wordCount} words</span>
+    <span>~${readTime(note.wordCount)} min read</span>
+  `;
+
+  // active tags
+  const at=document.getElementById("active-tags");
+  at.innerHTML=note.tags.map(t=>`<span class="active-tag-chip">#${t}</span>`).join("");
+
+  // pin/fav buttons
+  const bp=document.getElementById("btn-pin");
+  const bf=document.getElementById("btn-fav");
+  bp.classList.toggle("on",note.pinned);
+  bp.textContent=note.pinned?"📌 Pinned":"📌 Pin";
+  bf.classList.toggle("on",note.favorite);
+  bf.style.color=note.favorite?"#f59e0b":"var(--text-dim)";
+  bf.textContent=note.favorite?"♥ Favorited":"♥ Favorite";
+
+  // status bar
+  document.getElementById("status-words").textContent=`${note.wordCount} words`;
+  document.getElementById("status-chars").textContent=`${note.charCount} chars`;
+  document.getElementById("status-read").textContent=`~${readTime(note.wordCount)} min read`;
+  const sm=document.getElementById("status-mood");
+  sm.textContent=note.mood?`${MOODS.find(m=>m.l===note.mood)?.icon||""} ${note.mood}`:"";
+}
+
+function buildColorDots(note){
+  const el=document.getElementById("color-dots");
+  el.innerHTML="";
+  NOTE_COLORS.forEach(c=>{
+    const d=document.createElement("div");
+    d.className="color-dot"+(note.color===c?" active":"");
+    d.style.background=c;
+    if(note.color===c) d.style.boxShadow=`0 0 10px ${c}`;
+    d.onclick=()=>updateNote(note.id,{color:c});
+    el.appendChild(d);
+  });
+}
+
+function buildTagPills(note){
+  const el=document.getElementById("tag-pills");
+  el.innerHTML="";
+  ALL_TAGS.forEach(t=>{
+    const s=document.createElement("div");
+    s.className="tag-pill"+(note.tags.includes(t)?" on":"");
+    s.textContent="#"+t;
+    s.onclick=()=>{
+      const tags=note.tags.includes(t)?note.tags.filter(x=>x!==t):[...note.tags,t];
+      updateNote(note.id,{tags});
+    };
+    el.appendChild(s);
+  });
+}
+
+function buildMoodRow(note){
+  const el=document.getElementById("mood-row");
+  el.innerHTML="";
+  MOODS.forEach(m=>{
+    const b=document.createElement("button");
+    const isOn=note.mood===m.l;
+    b.className="mood-btn"+(isOn?" on":note.mood&&!isOn?" dim":"");
+    b.textContent=m.icon;
+    b.title=m.l;
+    b.onclick=()=>updateNote(note.id,{mood:note.mood===m.l?null:m.l});
+    el.appendChild(b);
+  });
+  if(note.mood){
+    const lbl=document.createElement("span");
+    lbl.id="mood-label";lbl.style.fontSize="11px";lbl.style.color="var(--text-muted)";
+    lbl.textContent="Mood: "+note.mood;
+    el.appendChild(lbl);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   NOTE CRUD
+═══════════════════════════════════════════════════════ */
+function newNote(ov={}){
+  const n=mkNote(ov);
+  notes.unshift(n);
+  activeId=n.id;
+  panel="notes";
+  save("gp_notes",notes);
+  renderAll();
+  setTimeout(()=>document.getElementById("note-body").focus(),120);
+  showToast("✦ New note created");
+}
+
+function updateNote(id,changes){
+  const idx=notes.findIndex(n=>n.id===id);
+  if(idx<0)return;
+  const n={...notes[idx],...changes,updatedAt:new Date().toISOString()};
+  if(changes.body!==undefined){n.wordCount=wc(changes.body);n.charCount=changes.body.length;}
+  notes[idx]=n;
+  save("gp_notes",notes);
+  renderAll();
+}
+
+function togglePin(id){updateNote(id,{pinned:!notes.find(n=>n.id===id)?.pinned});}
+function toggleFav(id){updateNote(id,{favorite:!notes.find(n=>n.id===id)?.favorite});}
+
+function openDelConfirm(id,perm=false){
+  pendingDeleteId=id;pendingDeletePerm=perm;
+  document.getElementById("del-modal-title").textContent=perm?"Permanently Delete?":"Move to Trash?";
+  document.getElementById("del-modal-text").textContent=perm?"This action cannot be undone.":"You can restore it from Trash later.";
+  document.getElementById("del-confirm-btn").textContent=perm?"Delete Forever":"Move to Trash";
+  openModal("del-modal");
+}
+
+function moveToTrash(id){
+  const n=notes.find(x=>x.id===id);
+  if(n) trash.unshift({...n,deletedAt:new Date().toISOString()});
+  notes=notes.filter(x=>x.id!==id);
+  if(activeId===id) activeId=null;
+  save("gp_notes",notes);save("gp_trash",trash);
+  closeModal("del-modal");
+  showToast("🗑 Moved to trash");
+  renderAll();
+}
+
+function permDelete(id){
+  trash=trash.filter(x=>x.id!==id);
+  save("gp_trash",trash);
+  closeModal("del-modal");
+  showToast("Permanently deleted");
+  renderAll();
+}
+
+function restoreNote(id){
+  const n=trash.find(x=>x.id===id);
+  if(n){const{deletedAt,...rest}=n;notes.unshift(rest);}
+  trash=trash.filter(x=>x.id!==id);
+  save("gp_notes",notes);save("gp_trash",trash);
+  showToast("♻ Note restored");
+  renderAll();
+}
+
+function duplicateNote(id){
+  const n=notes.find(x=>x.id===id);
+  if(!n)return;
+  const d=mkNote({...n,id:uid(),title:n.title+" (copy)",createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()});
+  notes.unshift(d);activeId=d.id;
+  save("gp_notes",notes);
+  showToast("⎘ Note duplicated");
+  renderAll();
+}
+
+function copyNote(id){
+  const n=notes.find(x=>x.id===id);
+  if(!n)return;
+  navigator.clipboard.writeText((n.title?n.title+"\n\n":"")+n.body).then(()=>showToast("📋 Copied to clipboard"));
+}
+
+function exportNote(id){
+  const n=notes.find(x=>x.id===id);
+  if(!n)return;
+  const blob=new Blob(["# "+(n.title||"Untitled")+"\n\n"+n.body],{type:"text/markdown"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+  a.download=(n.title||"note").replace(/\s+/g,"-")+".md";a.click();
+  showToast("⬇ Exported as Markdown");
+}
+
+/* ═══════════════════════════════════════════════════════
+   SIDEBAR BADGES & STREAK
+═══════════════════════════════════════════════════════ */
+function updateBadges(){
+  document.getElementById("badge-notes").textContent=notes.length;
+  document.getElementById("badge-favs").textContent=notes.filter(n=>n.favorite).length;
+  document.getElementById("badge-trash").textContent=trash.length;
+  document.getElementById("streak-num").textContent=calcStreak();
+}
+
+/* ═══════════════════════════════════════════════════════
+   STATS MODAL
+═══════════════════════════════════════════════════════ */
+function openStats(){
+  const totalWords=notes.reduce((s,n)=>s+n.wordCount,0);
+  const data=[
+    ["✦","Total Notes",notes.length,"notes"],
+    ["💬","Total Words",totalWords.toLocaleString(),"words"],
+    ["📅","Written Today",notes.filter(n=>new Date(n.updatedAt).toDateString()===todayStr()).length,"notes"],
+    ["📌","Pinned",notes.filter(n=>n.pinned).length,"notes"],
+    ["♥","Favorites",notes.filter(n=>n.favorite).length,"notes"],
+    ["🔥","Day Streak",calcStreak(),"days"],
+    ["🏷","Tags Used",[...new Set(notes.flatMap(n=>n.tags))].length,"tags"],
+    ["⏱","Avg Read Time",readTime(totalWords/Math.max(1,notes.length)),"min/note"],
+  ];
+  document.getElementById("stats-grid").innerHTML=data.map(([icon,label,val,unit])=>`
+    <div class="stat-card">
+      <div class="stat-icon">${icon}</div>
+      <div class="stat-val">${val}</div>
+      <div class="stat-label">${label}</div>
+    </div>
+  `).join("");
+
+  const usedTags=[...new Set(notes.flatMap(n=>n.tags))];
+  const tw=document.getElementById("tags-used-wrap");
+  if(usedTags.length){
+    tw.style.display="block";
+    document.getElementById("tags-used").innerHTML=usedTags.map(t=>
+      `<span class="active-tag-chip">#${t} · ${notes.filter(n=>n.tags.includes(t)).length}</span>`
+    ).join("");
+  } else tw.style.display="none";
+
+  openModal("stats-modal");
+}
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATES MODAL
+═══════════════════════════════════════════════════════ */
+function buildTemplateList(){
+  document.getElementById("tpl-list").innerHTML=TEMPLATES.map((t,i)=>`
+    <div class="tpl-item" data-tpl="${i}">
+      <span class="tpl-icon">${t.icon}</span>
+      <div>
+        <div class="tpl-name">${t.label}</div>
+        <div class="tpl-desc">${t.desc}</div>
+      </div>
+      <span class="tpl-arrow">→</span>
+    </div>
+  `).join("");
+  document.querySelectorAll(".tpl-item").forEach(el=>{
+    el.onclick=()=>{
+      const t=TEMPLATES[el.dataset.tpl];
+      newNote({title:t.label,body:t.body});
+      closeModal("tpl-modal");
+    };
+  });
+}
+
+/* ═══════════════════════════════════════════════════════
+   MODAL UTILS
+═══════════════════════════════════════════════════════ */
+function openModal(id){document.getElementById(id).classList.add("open");}
+function closeModal(id){document.getElementById(id).classList.remove("open");}
+
+/* ═══════════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════════ */
+function showToast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg;t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove("show"),2600);
+}
+
+/* ═══════════════════════════════════════════════════════
+   MAIN RENDER
+═══════════════════════════════════════════════════════ */
+function renderAll(){
+  // list width
+  const nlw=document.getElementById("note-list-wrap");
+  nlw.classList.toggle("full",!activeId);
+  nlw.classList.toggle("split",!!activeId);
+
+  // sidebar active states
+  document.querySelectorAll("[data-panel]").forEach(el=>el.classList.toggle("active",el.dataset.panel===panel));
+  document.querySelectorAll("[data-sort]").forEach(el=>el.classList.toggle("active",el.dataset.sort===sortBy));
+  document.querySelectorAll("[data-tag]").forEach(el=>{
+    const t=el.dataset.tag;
+    el.classList.toggle("active",t==="__all__"?!filterTag:t===filterTag);
+  });
+
+  buildTagList();
+  updateBadges();
+  renderCards();
+  renderEditor();
+}
+
+/* ═══════════════════════════════════════════════════════
+   EVENT LISTENERS
+═══════════════════════════════════════════════════════ */
+// sidebar panel nav
+document.querySelectorAll("[data-panel]").forEach(el=>{
+  el.onclick=()=>{panel=el.dataset.panel;activeId=null;renderAll();};
+});
+
+// sort
+document.querySelectorAll("[data-sort]").forEach(el=>{
+  el.onclick=()=>{sortBy=el.dataset.sort;renderAll();};
+});
+
+// all-tags
+document.querySelector("[data-tag='__all__']").onclick=()=>{filterTag=null;renderAll();};
+
+// sidebar toggle
+document.getElementById("menu-btn").onclick=()=>{
+  sidebarVisible=!sidebarVisible;
+  document.getElementById("sidebar").classList.toggle("hidden",!sidebarVisible);
 };
 
-function getProgress() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-  } catch { return {}; }
-}
+// search
+const searchEl=document.getElementById("search");
+const searchClear=document.getElementById("search-clear");
+searchEl.addEventListener("input",()=>{
+  searchClear.style.display=searchEl.value?"block":"none";
+  renderAll();
+});
+searchEl.addEventListener("focus",()=>searchEl.style.borderColor="var(--accent)");
+searchEl.addEventListener("blur",()=>searchEl.style.borderColor="var(--border)");
+searchClear.onclick=()=>{searchEl.value="";searchClear.style.display="none";renderAll();};
 
-function saveProgress(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
+// view toggle
+document.getElementById("vbtn-grid").onclick=()=>{
+  viewMode="grid";
+  document.getElementById("vbtn-grid").classList.add("active");
+  document.getElementById("vbtn-list").classList.remove("active");
+  renderAll();
+};
+document.getElementById("vbtn-list").onclick=()=>{
+  viewMode="list";
+  document.getElementById("vbtn-list").classList.add("active");
+  document.getElementById("vbtn-grid").classList.remove("active");
+  renderAll();
+};
 
-function getDayKey(weekNum, dayIdx) {
-  return `w${weekNum}_d${dayIdx}`;
-}
+// new note
+document.getElementById("new-note-btn").onclick=()=>newNote();
 
-function updateProgressUI() {
-  const data = getProgress();
-  const done = Object.values(data).filter(Boolean).length;
-  const pct = Math.round((done / TOTAL) * 100);
-  document.getElementById('progressBar').style.width = pct + '%';
-  document.getElementById('progressPct').textContent = pct + '%';
-  document.getElementById('progressCount').textContent = done + '/' + TOTAL;
-}
+// editor inputs
+let editorTimer=null;
+document.getElementById("note-title").addEventListener("input",e=>{
+  if(!activeId)return;
+  clearTimeout(editorTimer);
+  editorTimer=setTimeout(()=>updateNote(activeId,{title:e.target.value}),300);
+});
+document.getElementById("note-body").addEventListener("input",e=>{
+  if(!activeId)return;
+  clearTimeout(editorTimer);
+  editorTimer=setTimeout(()=>updateNote(activeId,{body:e.target.value}),300);
+});
 
-function toggleDay(weekNum, dayIdx, checked) {
-  const data = getProgress();
-  const key = getDayKey(weekNum, dayIdx);
-  data[key] = checked;
-  saveProgress(data);
-  updateProgressUI();
+// editor toolbar buttons
+document.getElementById("btn-pin").onclick=()=>{ if(activeId) togglePin(activeId); };
+document.getElementById("btn-fav").onclick=()=>{ if(activeId) toggleFav(activeId); };
+document.getElementById("btn-copy").onclick=()=>{ if(activeId) copyNote(activeId); };
+document.getElementById("btn-dup").onclick=()=>{ if(activeId) duplicateNote(activeId); };
+document.getElementById("btn-export").onclick=()=>{ if(activeId) exportNote(activeId); };
+document.getElementById("btn-del").onclick=()=>{ if(activeId) openDelConfirm(activeId,false); };
 
-  // update row style
-  const row = document.getElementById('row-' + key);
-  if (row) row.classList.toggle('completed', checked);
+// stats
+document.getElementById("stats-btn").onclick=openStats;
 
-  // update week mini dots
-  renderWeekDots(weekNum);
-}
+// templates
+document.getElementById("tpl-btn").onclick=()=>{buildTemplateList();openModal("tpl-modal");};
 
-function renderWeekDots(weekNum) {
-  const data = getProgress();
-  const w = weeks.find(x => x.week === weekNum);
-  if (!w) return;
-  const dotsEl = document.getElementById('dots-w' + weekNum);
-  if (!dotsEl) return;
-  dotsEl.innerHTML = w.days.map((_, i) => {
-    const key = getDayKey(weekNum, i);
-    return `<div class="mini-dot ${data[key] ? 'done' : ''}"></div>`;
-  }).join('');
-  const doneCount = w.days.filter((_, i) => data[getDayKey(weekNum, i)]).length;
-  const countEl = document.getElementById('count-w' + weekNum);
-  if (countEl) countEl.textContent = doneCount + '/' + w.days.length;
-}
+// empty trash
+document.getElementById("empty-trash-btn").onclick=()=>{trash=[];save("gp_trash",trash);renderAll();showToast("Trash emptied");};
 
-function resetProgress() {
-  if (!confirm('Reset all progress? This cannot be undone.')) return;
-  localStorage.removeItem(STORAGE_KEY);
-  updateProgressUI();
-  // uncheck all checkboxes and remove completed class
-  document.querySelectorAll('.check-input').forEach(cb => cb.checked = false);
-  document.querySelectorAll('.day-row.completed').forEach(r => r.classList.remove('completed'));
-  document.querySelectorAll('.mini-dot').forEach(d => d.classList.remove('done'));
-  document.querySelectorAll('[id^="count-w"]').forEach(el => {
-    const weekNum = parseInt(el.id.replace('count-w',''));
-    const w = weeks.find(x => x.week === weekNum);
-    if (w) el.textContent = '0/' + w.days.length;
+// delete confirm
+document.getElementById("del-confirm-btn").onclick=()=>{
+  if(!pendingDeleteId)return;
+  if(pendingDeletePerm) permDelete(pendingDeleteId);
+  else moveToTrash(pendingDeleteId);
+};
+
+// modal closes
+document.querySelectorAll("[data-close]").forEach(el=>{el.onclick=()=>closeModal(el.dataset.close);});
+document.querySelectorAll(".modal-bg").forEach(el=>{el.onclick=e=>{if(e.target===el)el.classList.remove("open");};});
+
+// keyboard shortcuts
+document.addEventListener("keydown",e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key==="k"){e.preventDefault();searchEl.focus();}
+  if((e.ctrlKey||e.metaKey)&&e.key==="n"){e.preventDefault();newNote();}
+  if(e.key==="Escape"){
+    activeId=null;
+    document.querySelectorAll(".modal-bg.open").forEach(m=>m.classList.remove("open"));
+    renderAll();
+  }
+});
+
+/* ═══════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════ */
+applyAccent(accentI);
+buildAccentRow();
+buildTemplateList();
+renderAll();
+
+// seed a welcome note if empty
+if(notes.length===0){
+  newNote({
+    title:"Welcome to Glasspad ✦",
+    body:"Your premium notes app is ready.\n\nHere's what you can do:\n• Create notes with + New Note (Ctrl+N)\n• Use Templates for structured notes\n• Tag notes to stay organised\n• Set your mood while writing\n• Pin & favourite important notes\n• Export notes as Markdown\n• Change accent color from the top bar\n• Full-text search with Ctrl+K\n\nEnjoy writing! 🎉",
+    color:"#6d28d9",
+    tags:["personal"],
+    mood:"Excited"
   });
 }
-
-function renderWeeks(weekNums) {
-  const grid = document.getElementById('weeksGrid');
-  grid.innerHTML = '';
-  const data = getProgress();
-
-  weeks.filter(w => weekNums.includes(w.week)).forEach(w => {
-    const doneCount = w.days.filter((_, i) => data[getDayKey(w.week, i)]).length;
-    const phaseColors = { 1:'#00d4aa', 2:'#00d4aa', 3:'#ff6b35', 4:'#ff6b35', 5:'#a855f7', 6:'#a855f7', 7:'#ffd700', 8:'#ffd700', 9:'#ffd700', 10:'#ffd700' };
-    const col = phaseColors[w.week] || '#fff';
-
-    const group = document.createElement('div');
-    group.className = 'week-group';
-    group.innerHTML = `
-      <div class="week-header" onclick="toggleWeek(this.parentElement)">
-        <span class="week-num" style="color:${col}">W${w.week}</span>
-        <span class="week-theme">${w.theme}</span>
-        <div class="week-progress-mini">
-          <div class="mini-dots" id="dots-w${w.week}">
-            ${w.days.map((_, i) => `<div class="mini-dot ${data[getDayKey(w.week, i)] ? 'done' : ''}"></div>`).join('')}
-          </div>
-          <span id="count-w${w.week}">${doneCount}/${w.days.length}</span>
-        </div>
-        <span class="week-chevron" style="margin-left:0.5rem">▼</span>
-      </div>
-      <div class="week-body">
-        <div class="day-row" style="background: rgba(255,255,255,0.02)">
-          <div style="border-right:1px solid var(--border)"></div>
-          <div class="day-label" style="color:var(--muted);font-size:0.6rem;letter-spacing:0.15em">SESSION</div>
-          <div class="day-mern"><span class="col-header mern-label">MERN + AI TRACK</span></div>
-          <div class="day-cpp"><span class="col-header cpp-label">C++ DSA (TUF) TRACK</span></div>
-        </div>
-        ${w.days.map((d, i) => {
-          const key = getDayKey(w.week, i);
-          const checked = data[key] ? 'checked' : '';
-          return `
-          <div class="day-row ${data[key] ? 'completed' : ''}" id="row-${key}">
-            <div class="day-check">
-              <input type="checkbox" class="check-input" ${checked}
-                onchange="toggleDay(${w.week}, ${i}, this.checked)" title="Mark as done">
-            </div>
-            <div class="day-label">${d.label}</div>
-            <div class="day-mern"><span class="day-topic">${d.mern}</span></div>
-            <div class="day-cpp"><span class="day-topic">${d.cpp}</span></div>
-          </div>`;
-        }).join('')}
-      </div>
-    `;
-    grid.appendChild(group);
-  });
-
-  updateProgressUI();
-}
-
-function toggleWeek(el) {
-  el.classList.toggle('open');
-}
-
-function filterPhase(key, btn) {
-  document.querySelectorAll('.phase-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderWeeks(phaseMap[key]);
-}
-
-renderWeeks([1,2,3,4,5,6,7,8,9,10]);
 </script>
 </body>
 </html>
